@@ -11,13 +11,28 @@ import java.util.UUID;
 public class Utilidades {
 
     // -------------------------------------------------------------------------------
+    /**
+     * Este método recibe un string de texto y devuelve una lista de bytes, a modo de utilidad
+     *
+     * @param {String} texto - Texto a convertir.
+     *
+     * @returns {Lista<Byte></>} Lista de bytes transformada.
+     */
     // -------------------------------------------------------------------------------
+
     public static byte[] stringToBytes ( String texto ) {
         return texto.getBytes();
         // byte[] b = string.getBytes(StandardCharsets.UTF_8); // Ja
     } // ()
 
     // -------------------------------------------------------------------------------
+    /**
+     * Este método recibe un string de texto y devuelve un objeto UUID, a modo de utilidad
+     *
+     * @param {String} texto - Texto a convertir.
+     *
+     * @returns {Lista<Byte></>} Objeto UUID transformado.
+     */
     // -------------------------------------------------------------------------------
     public static UUID stringToUUID( String uuid ) {
         if ( uuid.length() != 16 ) {
@@ -37,18 +52,39 @@ public class Utilidades {
     } // ()
 
     // -------------------------------------------------------------------------------
+    /**
+     * Este método recibe un objeto UUID y devuelve una String, a modo de utilidad
+     *
+     * @param {UUID} uuid - Objeto a convertir.
+     *
+     * @returns {String} String transformada.
+     */
     // -------------------------------------------------------------------------------
     public static String uuidToString ( UUID uuid ) {
         return bytesToString( dosLongToBytes( uuid.getMostSignificantBits(), uuid.getLeastSignificantBits() ) );
     } // ()
 
     // -------------------------------------------------------------------------------
+    /**
+     * Este método recibe un objeto UUID y devuelve una String, a modo de utilidad
+     *
+     * @param {UUID} uuid - Objeto a convertir.
+     *
+     * @returns {String} String transformada.
+     */
     // -------------------------------------------------------------------------------
     public static String uuidToHexString ( UUID uuid ) {
         return bytesToHexString( dosLongToBytes( uuid.getMostSignificantBits(), uuid.getLeastSignificantBits() ) );
     } // ()
 
     // -------------------------------------------------------------------------------
+    /**
+     * Este método recibe una lista de bytes y devuelve una String, a modo de utilidad
+     *
+     * @param {Lista<Byte>} bytes - Lista de bytes  a convertir.
+     *
+     * @returns {String} String transformada.
+     */
     // -------------------------------------------------------------------------------
     public static String bytesToString( byte[] bytes ) {
         if (bytes == null ) {
@@ -63,6 +99,15 @@ public class Utilidades {
     }
 
     // -------------------------------------------------------------------------------
+    /**
+     * Este método recibe dos numeros long refieriendose al byte menos y mas significativo
+     * y los convierte en una lista de bytes, a modo de utilidad
+     *
+     * @param {N} masSignificativos - Lista de bytes  a convertir.
+     * @param {N} menosSignificativos - Lista de bytes  a convertir.
+     *
+     * @returns {Lista<Byte>} Lista de bytes transformada.
+     */
     // -------------------------------------------------------------------------------
     public static byte[] dosLongToBytes( long masSignificativos, long menosSignificativos ) {
         ByteBuffer buffer = ByteBuffer.allocate( 2 * Long.BYTES );
@@ -72,18 +117,42 @@ public class Utilidades {
     }
 
     // -------------------------------------------------------------------------------
+    /**
+     * Este método recibe una lista de bytes y devuelve su valor como un numero entero,
+     * a modo de utilidad
+     *
+     * @param {Lista<Byte>} bytes - Lista de bytes  a convertir.
+     *
+     * @returns {Z} Valor  int transformado.
+     */
     // -------------------------------------------------------------------------------
     public static int bytesToInt( byte[] bytes ) {
         return new BigInteger(bytes).intValue();
     }
 
     // -------------------------------------------------------------------------------
+    /**
+     * Este método recibe una lista de bytes y devuelve su valor como un numero long,
+     * a modo de utilidad
+     *
+     * @param {Lista<Byte>} bytes - Lista de bytes  a convertir.
+     *
+     * @returns {N} Valor long transformado .
+     */
     // -------------------------------------------------------------------------------
     public static long bytesToLong( byte[] bytes ) {
         return new BigInteger(bytes).longValue();
     }
 
     // -------------------------------------------------------------------------------
+    /**
+     * Este método recibe una lista de bytes y devuelve su valor como un numero entero,
+     * a modo de utilidad
+     *
+     * @param {Lista<Byte>} bytes - Lista de bytes  a convertir.
+     *
+     * @returns {Z} Valor  int transformado.
+     */
     // -------------------------------------------------------------------------------
     public static int bytesToIntOK( byte[] bytes ) {
         if (bytes == null ) {
@@ -122,6 +191,14 @@ public class Utilidades {
     } // ()
 
     // -------------------------------------------------------------------------------
+    /**
+     * Este método recibe una lista de bytes y devuelve su valor como una String hexadecimal,
+     * a modo de utilidad
+     *
+     * @param {Lista<Byte>} bytes - Lista de bytes  a convertir.
+     *
+     * @returns {Texto} Valor  string hexadecimal transformado.
+     */
     // -------------------------------------------------------------------------------
     public static String bytesToHexString( byte[] bytes ) {
 
