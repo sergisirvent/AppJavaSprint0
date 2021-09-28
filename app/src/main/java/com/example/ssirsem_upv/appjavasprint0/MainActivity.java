@@ -31,18 +31,26 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     // --------------------------------------------------------------
+    //Se definen una String identificativa para el log y un codigo que nos facilita
+    //la peticion de permisos
     // --------------------------------------------------------------
     private static final String ETIQUETA_LOG = ">>>>";
 
     private static final int CODIGO_PETICION_PERMISOS = 11223344;
 
     // --------------------------------------------------------------
+    //Declaracion del objeto BluetoothLeScanner y declaracion e inicialización a null del
+    //objeto ScanCallback
     // --------------------------------------------------------------
     private BluetoothLeScanner elEscanner;
 
     private ScanCallback callbackDelEscaneo = null;
 
     // --------------------------------------------------------------
+    /**
+     * Este método privado instala el scancallback y en el caso de haber dispositivos
+     * muestra su informacion y en caso de no haberlos indica que no hay.No recibe ni devuelve nada.
+     */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void buscarTodosLosDispositivosBTLE() {
@@ -51,24 +59,33 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): instalamos scan callback ");
 
         this.callbackDelEscaneo = new ScanCallback() {
+
+            //analizamos el resultado del scanner
+
             @Override
             public void onScanResult( int callbackType, ScanResult resultado ) {
+                //pasamos resutados a super
                 super.onScanResult(callbackType, resultado);
                 Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): onScanResult() ");
 
+                //mostramos la info
                 mostrarInformacionDispositivoBTLE( resultado );
             }
 
             @Override
             public void onBatchScanResults(List<ScanResult> results) {
+                //pasamos resutados a super
                 super.onBatchScanResults(results);
+                //mensaje de batch
                 Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): onBatchScanResults() ");
 
             }
 
             @Override
             public void onScanFailed(int errorCode) {
+                //pasamos resutados a super
                 super.onScanFailed(errorCode);
+                //mensaje de error
                 Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): onScanFailed() ");
 
             }
@@ -81,10 +98,17 @@ public class MainActivity extends AppCompatActivity {
     } // ()
 
     // --------------------------------------------------------------
+    /**
+     * Este método privado se encarga de mostrar en el log la informacion del dispositivo
+     * detectado en el escaner.Recibe un resultad del escaner pero no devuelve nada.
+     *
+     * @param {ScanResult} resultado - Resultado del escaner previo.
+     */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void mostrarInformacionDispositivoBTLE(ScanResult resultado ) {
 
+        //obtenemos el dispositivo y sus datos
         BluetoothDevice bluetoothDevice = resultado.getDevice();
         byte[] bytes = resultado.getScanRecord().getBytes();
         int rssi = resultado.getRssi();
@@ -108,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " bytes = " + new String(bytes));
         Log.d(ETIQUETA_LOG, " bytes (" + bytes.length + ") = " + Utilidades.bytesToHexString(bytes));
 
+        //creamos trama beacon
         TramaIBeacon tib = new TramaIBeacon(bytes);
 
         Log.d(ETIQUETA_LOG, " ----------------------------------------------------");
@@ -130,6 +155,12 @@ public class MainActivity extends AppCompatActivity {
     } // ()
 
     // --------------------------------------------------------------
+    /**
+     * Este método privado se encarga de buscar un dispositivo a partir de su nombre.
+     * Recibe un nombre de dispositivo pero no devuelve nada.
+     *
+     * @param {String} dispositivoBuscado - Nombre del dispositivo buscado.
+     */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void buscarEsteDispositivoBTLE(final String dispositivoBuscado ) {
@@ -140,9 +171,11 @@ public class MainActivity extends AppCompatActivity {
 
         // super.onScanResult(ScanSettings.SCAN_MODE_LOW_LATENCY, result); para ahorro de energía
 
+        //analizamos el resultado del scanner
         this.callbackDelEscaneo = new ScanCallback() {
             @Override
             public void onScanResult( int callbackType, ScanResult resultado ) {
+                //pasamos resutados a super
                 super.onScanResult(callbackType, resultado);
                 Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onScanResult() ");
 
@@ -151,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onBatchScanResults(List<ScanResult> results) {
+                //pasamos resutados a super
                 super.onBatchScanResults(results);
                 Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onBatchScanResults() ");
 
@@ -158,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onScanFailed(int errorCode) {
+                //pasamos resutados a super
                 super.onScanFailed(errorCode);
                 Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onScanFailed() ");
 
@@ -174,28 +209,51 @@ public class MainActivity extends AppCompatActivity {
     } // ()
 
     // --------------------------------------------------------------
+    /**
+     * Este método privado se encarga de detener la busqueda de dispositivos Bluetooth.
+     * No recibe ni devuelve nada.
+     *
+     */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void detenerBusquedaDispositivosBTLE() {
 
+        //si el callback esta en null paramos con return
         if ( this.callbackDelEscaneo == null ) {
             return;
         }
 
+        //paramos scanner
         this.elEscanner.stopScan( this.callbackDelEscaneo );
+        //ponemos el callback en null
         this.callbackDelEscaneo = null;
 
     } // ()
 
     // --------------------------------------------------------------
+    /**
+     * Este método público se encarga de buscar el dispositivo que haya pulsado el usuario.
+     * Recibe una vista refiriendose a la vista que pulsa el usuario en su interfaz.
+     *
+     * @param {View} v - Vista referente al interfaz del usuario
+     *
+     */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void botonBuscarDispositivosBTLEPulsado(View v ) {
         Log.d(ETIQUETA_LOG, " boton buscar dispositivos BTLE Pulsado" );
+        //llamamos metodo de la logica al pulsar el boton
         this.buscarTodosLosDispositivosBTLE();
     } // ()
 
     // --------------------------------------------------------------
+    /**
+     * Este método público se encarga de buscar el dispositivo que haya pulsado el usuario.
+     * Recibe una vista refiriendose a la vista que pulsa el usuario en su interfaz.
+     *
+     * @param {View} v - Vista referente al boton del interfaz del usuario
+     *
+     */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void botonBuscarNuestroDispositivoBTLEPulsado(View v ) {
@@ -203,28 +261,48 @@ public class MainActivity extends AppCompatActivity {
         //this.buscarEsteDispositivoBTLE( Utilidades.stringToUUID( "EPSG-GTI-PROY-3A" ) );
 
         //this.buscarEsteDispositivoBTLE( "EPSG-GTI-PROY-3A" );
+        //llamamos metodo de la logica al pulsar el boton
         this.buscarEsteDispositivoBTLE( "fistro" );
 
     } // ()
 
     // --------------------------------------------------------------
+    /**
+     * Este método público se encarga de detener la busqueda de dispositivos gracias al boton que
+     * pulsa el usuario.
+     * Recibe una vista refiriendose a la vista que pulsa el usuario en su interfaz.
+     *
+     * @param {View} v - Vista referente al boton del interfaz del usuario
+     *
+     */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void botonDetenerBusquedaDispositivosBTLEPulsado(View v ) {
         Log.d(ETIQUETA_LOG, " boton detener busqueda dispositivos BTLE Pulsado" );
+
+        //llamamos metodo de la logica al pulsar el boton
         this.detenerBusquedaDispositivosBTLE();
     } // ()
 
     // --------------------------------------------------------------
+    /**
+     * Este método privado se encarga de inicializar el proceso de deteccion por bluetooth
+     * Este metodo no recibe ni devuelve nada.
+     *
+     * @param {View} v - Vista referente al boton del interfaz del usuario
+     *
+     */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void inicializarBlueTooth() {
         Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): obtenemos adaptador BT ");
 
+        //creamos el adapter
         BluetoothAdapter bta = BluetoothAdapter.getDefaultAdapter();
 
         Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): habilitamos adaptador BT ");
 
+        //lo activamos
         bta.enable();
 
         Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): habilitado =  " + bta.isEnabled() );
@@ -233,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): obtenemos escaner btle ");
 
+        //obtenemos el scanner
         this.elEscanner = bta.getBluetoothLeScanner();
 
         if ( this.elEscanner == null ) {
@@ -242,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): voy a perdir permisos (si no los tuviera) !!!!");
 
+        //comprobamos los permisos
         if (
                 ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
                         || ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED
@@ -261,36 +341,53 @@ public class MainActivity extends AppCompatActivity {
 
 
     // --------------------------------------------------------------
+
+    /**
+     *
+     * Metodo onCreate de la aplicacion
+     */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //establecemos la vista
         setContentView(R.layout.activity_main);
 
         Log.d(ETIQUETA_LOG, " onCreate(): empieza ");
 
-        inicializarBlueTooth();
+        inicializarBlueTooth();//llamamos metodo para inicializar el BlueTooth
 
         Log.d(ETIQUETA_LOG, " onCreate(): termina ");
 
     } // onCreate()
 
     // --------------------------------------------------------------
+
+    /**
+     * Este metodo se ejecuta una vez se obtiene una respuesta a si se tienen los permisos o no,
+     * gracias a esto te facilita el estado de tus permisos.
+     *
+     * @param {Z} requestCode - Codigo de solicitud
+     * @param {Lista<Texto>} permissions - Lista de permisos
+     * @param {Lista<Z>} grantResults - Lista de resultados
+     */
     // --------------------------------------------------------------
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         super.onRequestPermissionsResult( requestCode, permissions, grantResults);
 
+        //analizamos el codigo de solicitud
         switch (requestCode) {
             case CODIGO_PETICION_PERMISOS:
-                // If request is cancelled, the result arrays are empty.
+
+                //Si la solicitud se cancela, la array de resultados estara vacia
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     Log.d(ETIQUETA_LOG, " onRequestPermissionResult(): permisos concedidos  !!!!");
-                    // Permission is granted. Continue the action or workflow
-                    // in your app.
+
+                    //El permiso esta concedido. Continua el flujo de trabajo de tu app
                 }  else {
 
                     Log.d(ETIQUETA_LOG, " onRequestPermissionResult(): Socorro: permisos NO concedidos  !!!!");
@@ -298,8 +395,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return;
         }
-        // Other 'case' lines to check for other
-        // permissions this app might request.
+        // Estas lineas son por si acaso se deben comprobar otros permisos de tu app
+        
     } // ()
 
 } // class
