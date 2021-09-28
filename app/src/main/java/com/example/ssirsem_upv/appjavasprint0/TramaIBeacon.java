@@ -161,6 +161,9 @@ public class TramaIBeacon {
     public TramaIBeacon(byte[] bytes ) {
         this.losBytes = bytes;
 
+        //separamos la cadena de bytes y vamos cogiendo los bytes que
+        //nos interesan para rellenar los atributos
+
         prefijo = Arrays.copyOfRange(losBytes, 0, 8+1 ); // 9 bytes
         uuid = Arrays.copyOfRange(losBytes, 9, 24+1 ); // 16 bytes
         major = Arrays.copyOfRange(losBytes, 25, 26+1 ); // 2 bytes

@@ -40,8 +40,11 @@ public class Utilidades {
         }
         byte[] comoBytes = uuid.getBytes();
 
+        //busca informacion byte a byte en el parametro
         String masSignificativo = uuid.substring(0, 8);
         String menosSignificativo = uuid.substring(8, 16);
+
+        //crea un nuevo objeto UUID gracias a la informacion obtenida arriba
         UUID res = new UUID( Utilidades.bytesToLong( masSignificativo.getBytes() ), Utilidades.bytesToLong( menosSignificativo.getBytes() ) );
 
         // Log.d( MainActivity.ETIQUETA_LOG, " \n\n***** stringToUUID *** " + uuid  + "=?=" + Utilidades.uuidToString( res ) );
@@ -88,12 +91,12 @@ public class Utilidades {
     // -------------------------------------------------------------------------------
     public static String bytesToString( byte[] bytes ) {
         if (bytes == null ) {
-            return "";
+            return "";//si es null devuelve comillas
         }
 
         StringBuilder sb = new StringBuilder();
         for (byte b : bytes) {
-            sb.append( (char) b );
+            sb.append( (char) b );//con string builder va construyendo la string byte a byte
         }
         return sb.toString();
     }
@@ -110,7 +113,8 @@ public class Utilidades {
      */
     // -------------------------------------------------------------------------------
     public static byte[] dosLongToBytes( long masSignificativos, long menosSignificativos ) {
-        ByteBuffer buffer = ByteBuffer.allocate( 2 * Long.BYTES );
+        ByteBuffer buffer = ByteBuffer.allocate( 2 * Long.BYTES );//crea el buffer
+        //añade los long al buffer
         buffer.putLong( masSignificativos );
         buffer.putLong( menosSignificativos );
         return buffer.array();
@@ -155,12 +159,14 @@ public class Utilidades {
      */
     // -------------------------------------------------------------------------------
     public static int bytesToIntOK( byte[] bytes ) {
+
         if (bytes == null ) {
-            return 0;
+            return 0;//si es null devuelve 0
         }
 
         if ( bytes.length > 4 ) {
-            throw new Error( "demasiados bytes para pasar a int ");
+            throw new Error( "demasiados bytes para pasar a int ");//si excede el limite de longitud
+                                                                    //lanzamos error
         }
         int res = 0;
 
@@ -203,9 +209,10 @@ public class Utilidades {
     public static String bytesToHexString( byte[] bytes ) {
 
         if (bytes == null ) {
-            return "";
+            return "";//si es null devuelve comillas
         }
 
+        //si no es null, gracias a string builder va creando la string byte a byte
         StringBuilder sb = new StringBuilder();
         for (byte b : bytes) {
             sb.append(String.format("%02x", b));
