@@ -17,6 +17,7 @@ import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -47,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothLeScanner elEscanner;
 
     private ScanCallback callbackDelEscaneo = null;
+
+//-------------------------------------
+
+    //----------------------
+    EditText txtMediciones;
+    EditText txtLatitud;
+    EditText txtLongitud;
+    Button btnInsertar;
 
 
     // --------------------------------------------------------------
@@ -345,6 +354,40 @@ public class MainActivity extends AppCompatActivity {
 
     // --------------------------------------------------------------
 
+
+
+    public void guardarMedicion(View quien) {
+        Log.d("clienterestandroid", "boton_enviar_pulsado");
+
+
+        // ojo: creo que hay que crear uno nuevo cada vez
+        PeticionarioREST elPeticionario = new PeticionarioREST();
+
+		/*
+
+		   enviarPeticion( "hola", function (res) {
+		   		res
+		   })
+
+        elPeticionario.hacerPeticionREST("GET",  "http://158.42.144.126:8080/prueba", null,
+			(int codigo, String cuerpo) => { } );
+
+		   */
+        //la contrabarra es pa clavar la cometa dins del string sense tancar el stringç
+        //http://localhost/phpmyadmin/sql.php?db=android_mysql&table=datosmedidos&pos=0
+        String textoJSON = "{\"Medicion\":\"" + txtMediciones.getText() + "\"}";
+        elPeticionario.hacerPeticionREST("POST", "http://192.168.1.37/back_endSprint0/insertar.php", textoJSON,
+                new PeticionarioREST.RespuestaREST() {
+                    @Override
+                    public void callback(int codigo, String cuerpo) {
+                        txtMediciones.setText("codigo respuesta= " + codigo + " <-> \n" + cuerpo);
+                    }
+                }
+        );
+
+
+    }
+
     /**
      *
      * Metodo onCreate de la aplicacion
@@ -362,6 +405,9 @@ public class MainActivity extends AppCompatActivity {
         inicializarBlueTooth();//llamamos metodo para inicializar el BlueTooth
 
         Log.d(ETIQUETA_LOG, " onCreate(): termina ");
+
+        txtMediciones = findViewById(R.id.txtMediciones);
+
 
     } // onCreate()
 
