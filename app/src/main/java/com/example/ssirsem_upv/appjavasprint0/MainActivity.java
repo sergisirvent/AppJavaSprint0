@@ -25,6 +25,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -55,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     EditText txtMediciones;
     EditText txtLatitud;
     EditText txtLongitud;
-    Button btnInsertar;
+    TextView textViewResultado;
 
 
     // --------------------------------------------------------------
@@ -357,36 +364,29 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void guardarMedicion(View quien) {
-        Log.d("clienterestandroid", "boton_enviar_pulsado");
+
+            Log.d("clienterestandroid", "boton_enviar_pulsado");
 
 
-        // ojo: creo que hay que crear uno nuevo cada vez
-        PeticionarioREST elPeticionario = new PeticionarioREST();
+            // ojo: creo que hay que crear uno nuevo cada vez
+            PeticionarioREST elPeticionario = new PeticionarioREST();
 
-		/*
 
-		   enviarPeticion( "hola", function (res) {
-		   		res
-		   })
-
-        elPeticionario.hacerPeticionREST("GET",  "http://158.42.144.126:8080/prueba", null,
-			(int codigo, String cuerpo) => { } );
-
-		   */
-        //la contrabarra es pa clavar la cometa dins del string sense tancar el stringç
-        //http://localhost/phpmyadmin/sql.php?db=android_mysql&table=datosmedidos&pos=0
-        String textoJSON = "{\"Medicion\":\"" + txtMediciones.getText() + "\"}";
-        elPeticionario.hacerPeticionREST("POST", "http://192.168.1.37/back_endSprint0/insertar.php", textoJSON,
-                new PeticionarioREST.RespuestaREST() {
-                    @Override
-                    public void callback(int codigo, String cuerpo) {
-                        txtMediciones.setText("codigo respuesta= " + codigo + " <-> \n" + cuerpo);
+            String textoJSON = "{\"Medicion\":\""+txtMediciones.getText()+"\", \"Longitud\":\""+txtLongitud.getText() +"\", \"Latitud\": \""+txtLatitud.getText()+"\"}";
+            elPeticionario.hacerPeticionREST("POST", "http://192.168.1.37/back_endSprint0/insertar.php", textoJSON,
+                    new PeticionarioREST.RespuestaREST() {
+                        @Override
+                        public void callback(int codigo, String cuerpo) {
+                            textViewResultado.setText("codigo respuesta= " + codigo + " <-> \n" + cuerpo + "SE HA AÑADIDO EL NUMERO"+ txtMediciones.getText());
+                        }
                     }
-                }
-        );
+            );
+
 
 
     }
+
+
 
     /**
      *
@@ -407,7 +407,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " onCreate(): termina ");
 
         txtMediciones = findViewById(R.id.txtMediciones);
-
+        txtLatitud = findViewById(R.id.txtLatitud);
+        txtLongitud = findViewById(R.id.txtLongitud);
+        textViewResultado = findViewById(R.id.textViewResultado);
 
     } // onCreate()
 
