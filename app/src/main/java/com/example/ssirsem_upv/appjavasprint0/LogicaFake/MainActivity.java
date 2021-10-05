@@ -1,5 +1,5 @@
 
-package com.example.ssirsem_upv.appjavasprint0;
+package com.example.ssirsem_upv.appjavasprint0.LogicaFake;
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
 
@@ -13,17 +13,21 @@ import android.bluetooth.le.ScanResult;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.ssirsem_upv.appjavasprint0.R;
+import com.example.ssirsem_upv.appjavasprint0.Ejemplos.TramaIBeacon;
+import com.example.ssirsem_upv.appjavasprint0.Utilidades.Utilidades;
+
 import java.util.List;
-import java.util.UUID;
 
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
@@ -45,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothLeScanner elEscanner;
 
     private ScanCallback callbackDelEscaneo = null;
+
+//-------------------------------------
+
+    //----------------------
+    EditText txtMediciones;
+    EditText txtLatitud;
+    EditText txtLongitud;
+    TextView textViewResultado;
+
 
     // --------------------------------------------------------------
     /**
@@ -342,6 +355,33 @@ public class MainActivity extends AppCompatActivity {
 
     // --------------------------------------------------------------
 
+
+
+    public void guardarMedicion(View quien) {
+
+            Log.d("clienterestandroid", "boton_enviar_pulsado");
+
+
+            // ojo: creo que hay que crear uno nuevo cada vez
+            PeticionarioREST elPeticionario = new PeticionarioREST();
+
+
+            String textoJSON = "{\"Medicion\":\""+txtMediciones.getText()+"\", \"Longitud\":\""+txtLongitud.getText() +"\", \"Latitud\": \""+txtLatitud.getText()+"\"}";
+            elPeticionario.hacerPeticionREST("POST", "http://192.168.0.113/back_endSprint0/LogicaNegocio/guardarMedicion.php", textoJSON,
+                    new PeticionarioREST.RespuestaREST() {
+                        @Override
+                        public void callback(int codigo, String cuerpo) {
+                            textViewResultado.setText("codigo respuesta= " + codigo + " <-> \n" + cuerpo + "SE HA AÑADIDO EL NUMERO"+ txtMediciones.getText());
+                        }
+                    }
+            );
+
+
+
+    }
+
+
+
     /**
      *
      * Metodo onCreate de la aplicacion
@@ -359,6 +399,11 @@ public class MainActivity extends AppCompatActivity {
         inicializarBlueTooth();//llamamos metodo para inicializar el BlueTooth
 
         Log.d(ETIQUETA_LOG, " onCreate(): termina ");
+
+        txtMediciones = findViewById(R.id.txtMediciones);
+        txtLatitud = findViewById(R.id.txtLatitud);
+        txtLongitud = findViewById(R.id.txtLongitud);
+        textViewResultado = findViewById(R.id.textViewResultado);
 
     } // onCreate()
 
