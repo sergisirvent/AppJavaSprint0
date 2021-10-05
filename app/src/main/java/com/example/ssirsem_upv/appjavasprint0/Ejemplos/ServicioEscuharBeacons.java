@@ -1,4 +1,4 @@
-package com.example.ssirsem_upv.appjavasprint0;
+package com.example.ssirsem_upv.appjavasprint0.Ejemplos;
 
 import android.app.IntentService;
 import android.app.Service;

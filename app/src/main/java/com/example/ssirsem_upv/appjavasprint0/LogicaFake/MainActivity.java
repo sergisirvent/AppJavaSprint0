@@ -1,5 +1,5 @@
 
-package com.example.ssirsem_upv.appjavasprint0;
+package com.example.ssirsem_upv.appjavasprint0.LogicaFake;
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
 
@@ -13,10 +13,8 @@ import android.bluetooth.le.ScanResult;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,15 +23,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.ssirsem_upv.appjavasprint0.R;
+import com.example.ssirsem_upv.appjavasprint0.Ejemplos.TramaIBeacon;
+import com.example.ssirsem_upv.appjavasprint0.Utilidades.Utilidades;
 
 import java.util.List;
-import java.util.UUID;
 
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
@@ -373,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             String textoJSON = "{\"Medicion\":\""+txtMediciones.getText()+"\", \"Longitud\":\""+txtLongitud.getText() +"\", \"Latitud\": \""+txtLatitud.getText()+"\"}";
-            elPeticionario.hacerPeticionREST("POST", "http://192.168.1.37/back_endSprint0/insertar.php", textoJSON,
+            elPeticionario.hacerPeticionREST("POST", "http://192.168.0.113/back_endSprint0/LogicaNegocio/guardarMedicion.php", textoJSON,
                     new PeticionarioREST.RespuestaREST() {
                         @Override
                         public void callback(int codigo, String cuerpo) {
