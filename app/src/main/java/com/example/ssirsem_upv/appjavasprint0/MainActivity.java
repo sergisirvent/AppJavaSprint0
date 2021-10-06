@@ -1,5 +1,5 @@
 
-package com.example.ssirsem_upv.appjavasprint0.LogicaFake;
+package com.example.ssirsem_upv.appjavasprint0;
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
 
@@ -23,8 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.ssirsem_upv.appjavasprint0.R;
 import com.example.ssirsem_upv.appjavasprint0.Ejemplos.TramaIBeacon;
+import com.example.ssirsem_upv.appjavasprint0.LogicaFake.LogicaFake;
 import com.example.ssirsem_upv.appjavasprint0.Utilidades.Utilidades;
 
 import java.util.List;
@@ -50,13 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
     private ScanCallback callbackDelEscaneo = null;
 
-//-------------------------------------
+    //-------------------------------------
 
     //----------------------
     EditText txtMediciones;
     EditText txtLatitud;
     EditText txtLongitud;
     TextView textViewResultado;
+    LogicaFake logicaFake = new LogicaFake();
 
 
     // --------------------------------------------------------------
@@ -354,31 +355,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     // --------------------------------------------------------------
+    //Metodo de guardar medicion que llama a la logica fake
+    // --------------------------------------------------------------
 
+    public void onClickBotonGuardar(View v){
 
+        MedicionPOJO medicion = new MedicionPOJO(Integer.parseInt(txtMediciones.getText().toString()),
+                Double.parseDouble(txtLatitud.getText().toString()),
+                Double.parseDouble(txtLongitud.getText().toString()));
 
-    public void guardarMedicion(View quien) {
-
-            Log.d("clienterestandroid", "boton_enviar_pulsado");
-
-
-            // ojo: creo que hay que crear uno nuevo cada vez
-            PeticionarioREST elPeticionario = new PeticionarioREST();
-
-
-            String textoJSON = "{\"Medicion\":\""+txtMediciones.getText()+"\", \"Longitud\":\""+txtLongitud.getText() +"\", \"Latitud\": \""+txtLatitud.getText()+"\"}";
-            elPeticionario.hacerPeticionREST("POST", "http://192.168.0.113/back_endSprint0/LogicaNegocio/guardarMedicion.php", textoJSON,
-                    new PeticionarioREST.RespuestaREST() {
-                        @Override
-                        public void callback(int codigo, String cuerpo) {
-                            textViewResultado.setText("codigo respuesta= " + codigo + " <-> \n" + cuerpo + "SE HA AÑADIDO EL NUMERO"+ txtMediciones.getText());
-                        }
-                    }
-            );
-
-
+        logicaFake.guardarMedicion(medicion);
 
     }
+
+
+
 
 
 

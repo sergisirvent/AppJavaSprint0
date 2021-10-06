@@ -1,5 +1,5 @@
 
-package com.example.ssirsem_upv.appjavasprint0.LogicaFake;
+package com.example.ssirsem_upv.appjavasprint0;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

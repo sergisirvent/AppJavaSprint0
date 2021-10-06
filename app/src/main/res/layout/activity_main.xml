@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LogicaFake.MainActivity">
+    tools:context=".MainActivity">
 
     <Button
         android:id="@+id/botonBuscarDispositivosBTLE"
@@ -86,7 +86,7 @@
         android:id="@+id/btnInsertar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="guardarMedicion"
+        android:onClick="onClickBotonGuardar"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
