@@ -1,4 +1,4 @@
-package com.example.ssirsem_upv.appjavasprint0.Ejemplos;
+package com.example.ssirsem_upv.appjavasprint0;
 
 import android.app.IntentService;
 import android.app.Service;
@@ -12,6 +12,7 @@ import static android.app.Service.START_STICKY;
 public class ServicioEscuharBeacons  extends IntentService {
 
     // ---------------------------------------------------------------------------------------------
+    //atributos privados de la clase
     // ---------------------------------------------------------------------------------------------
     private static final String ETIQUETA_LOG = ">>>>";
 
@@ -20,6 +21,7 @@ public class ServicioEscuharBeacons  extends IntentService {
     private boolean seguir = true;
 
     // ---------------------------------------------------------------------------------------------
+    //constructor de la clase
     // ---------------------------------------------------------------------------------------------
     public ServicioEscuharBeacons(  ) {
         super("HelloIntentService");
@@ -46,6 +48,10 @@ public class ServicioEscuharBeacons  extends IntentService {
      */
 
     // ---------------------------------------------------------------------------------------------
+
+    /**
+     * Método parar que cambia el booleano seguir  a false
+     */
     // ---------------------------------------------------------------------------------------------
     public void parar () {
 
@@ -64,6 +70,11 @@ public class ServicioEscuharBeacons  extends IntentService {
     }
 
     // ---------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * Método onDestroy que para el servicio de escuchar beacons
+     */
     // ---------------------------------------------------------------------------------------------
     public void onDestroy() {
 

@@ -1,5 +1,4 @@
-
-package com.example.ssirsem_upv.appjavasprint0.LogicaFake;
+package com.example.ssirsem_upv.appjavasprint0;
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
 
@@ -10,7 +9,12 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,8 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.ssirsem_upv.appjavasprint0.R;
-import com.example.ssirsem_upv.appjavasprint0.Ejemplos.TramaIBeacon;
+import com.example.ssirsem_upv.appjavasprint0.LogicaFake.LogicaFake;
 import com.example.ssirsem_upv.appjavasprint0.Utilidades.Utilidades;
 
 import java.util.List;
@@ -50,16 +53,27 @@ public class MainActivity extends AppCompatActivity {
 
     private ScanCallback callbackDelEscaneo = null;
 
-//-------------------------------------
-
+    //-------------------------------------
+    //Views que van a ser usadas en la app
     //----------------------
     EditText txtMediciones;
-    EditText txtLatitud;
-    EditText txtLongitud;
-    TextView textViewResultado;
+    EditText txtCuantas;
+
+    LogicaFake logicaFake = new LogicaFake();
+
+    //variables para el metodo de obtener la localizacion
+
+    private LocationManager locManager;
+    public Location loc;
+
+    private double longitud;
+    private double latitud;
+
+    private Intent elIntentDelServicio = null;
 
 
     // --------------------------------------------------------------
+
     /**
      * Este método privado instala el scancallback y en el caso de haber dispositivos
      * muestra su informacion y en caso de no haberlos indica que no hay.No recibe ni devuelve nada.
@@ -76,13 +90,13 @@ public class MainActivity extends AppCompatActivity {
             //analizamos el resultado del scanner
 
             @Override
-            public void onScanResult( int callbackType, ScanResult resultado ) {
+            public void onScanResult(int callbackType, ScanResult resultado) {
                 //pasamos resutados a super
                 super.onScanResult(callbackType, resultado);
                 Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): onScanResult() ");
 
                 //mostramos la info
-                mostrarInformacionDispositivoBTLE( resultado );
+                mostrarInformacionDispositivoBTLE(resultado);
             }
 
             @Override
@@ -106,11 +120,12 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): empezamos a escanear ");
 
-        this.elEscanner.startScan( this.callbackDelEscaneo);
+        this.elEscanner.startScan(this.callbackDelEscaneo);
 
     } // ()
 
     // --------------------------------------------------------------
+
     /**
      * Este método privado se encarga de mostrar en el log la informacion del dispositivo
      * detectado en el escaner.Recibe un resultad del escaner pero no devuelve nada.
@@ -119,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
      */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void mostrarInformacionDispositivoBTLE(ScanResult resultado ) {
+    private void mostrarInformacionDispositivoBTLE(ScanResult resultado) {
 
         //obtenemos el dispositivo y sus datos
         BluetoothDevice bluetoothDevice = resultado.getDevice();
@@ -140,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         }*/
 
         Log.d(ETIQUETA_LOG, " dirección = " + bluetoothDevice.getAddress());
-        Log.d(ETIQUETA_LOG, " rssi = " + rssi );
+        Log.d(ETIQUETA_LOG, " rssi = " + rssi);
 
         Log.d(ETIQUETA_LOG, " bytes = " + new String(bytes));
         Log.d(ETIQUETA_LOG, " bytes (" + bytes.length + ") = " + Utilidades.bytesToHexString(bytes));
@@ -168,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
     } // ()
 
     // --------------------------------------------------------------
+
     /**
      * Este método privado se encarga de buscar un dispositivo a partir de su nombre.
      * Recibe un nombre de dispositivo pero no devuelve nada.
@@ -176,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
      */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void buscarEsteDispositivoBTLE(final String dispositivoBuscado ) {
+    private void buscarEsteDispositivoBTLE(final String dispositivoBuscado) {
         Log.d(ETIQUETA_LOG, " buscarEsteDispositivoBTLE(): empieza ");
 
         Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): instalamos scan callback ");
@@ -187,12 +203,12 @@ public class MainActivity extends AppCompatActivity {
         //analizamos el resultado del scanner
         this.callbackDelEscaneo = new ScanCallback() {
             @Override
-            public void onScanResult( int callbackType, ScanResult resultado ) {
+            public void onScanResult(int callbackType, ScanResult resultado) {
                 //pasamos resutados a super
                 super.onScanResult(callbackType, resultado);
                 Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onScanResult() ");
 
-                mostrarInformacionDispositivoBTLE( resultado );
+                mostrarInformacionDispositivoBTLE(resultado);
             }
 
             @Override
@@ -212,16 +228,17 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        ScanFilter sf = new ScanFilter.Builder().setDeviceName( dispositivoBuscado ).build();
+        ScanFilter sf = new ScanFilter.Builder().setDeviceName(dispositivoBuscado).build();
 
-        Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): empezamos a escanear buscando: " + dispositivoBuscado );
+        Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): empezamos a escanear buscando: " + dispositivoBuscado);
         //Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): empezamos a escanear buscando: " + dispositivoBuscado
-          //      + " -> " + Utilidades.stringToUUID( dispositivoBuscado ) );
+        //      + " -> " + Utilidades.stringToUUID( dispositivoBuscado ) );
 
-        this.elEscanner.startScan( this.callbackDelEscaneo );
+        this.elEscanner.startScan(this.callbackDelEscaneo);
     } // ()
 
     // --------------------------------------------------------------
+
     /**
      * Este método privado se encarga de detener la busqueda de dispositivos Bluetooth.
      * No recibe ni devuelve nada.
@@ -232,18 +249,19 @@ public class MainActivity extends AppCompatActivity {
     private void detenerBusquedaDispositivosBTLE() {
 
         //si el callback esta en null paramos con return
-        if ( this.callbackDelEscaneo == null ) {
+        if (this.callbackDelEscaneo == null) {
             return;
         }
 
         //paramos scanner
-        this.elEscanner.stopScan( this.callbackDelEscaneo );
+        this.elEscanner.stopScan(this.callbackDelEscaneo);
         //ponemos el callback en null
         this.callbackDelEscaneo = null;
 
     } // ()
 
     // --------------------------------------------------------------
+
     /**
      * Este método público se encarga de buscar el dispositivo que haya pulsado el usuario.
      * Recibe una vista refiriendose a la vista que pulsa el usuario en su interfaz.
@@ -253,13 +271,14 @@ public class MainActivity extends AppCompatActivity {
      */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void botonBuscarDispositivosBTLEPulsado(View v ) {
-        Log.d(ETIQUETA_LOG, " boton buscar dispositivos BTLE Pulsado" );
+    public void botonBuscarDispositivosBTLEPulsado(View v) {
+        Log.d(ETIQUETA_LOG, " boton buscar dispositivos BTLE Pulsado");
         //llamamos metodo de la logica al pulsar el boton
         this.buscarTodosLosDispositivosBTLE();
     } // ()
 
     // --------------------------------------------------------------
+
     /**
      * Este método público se encarga de buscar el dispositivo que haya pulsado el usuario.
      * Recibe una vista refiriendose a la vista que pulsa el usuario en su interfaz.
@@ -269,17 +288,18 @@ public class MainActivity extends AppCompatActivity {
      */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void botonBuscarNuestroDispositivoBTLEPulsado(View v ) {
-        Log.d(ETIQUETA_LOG, " boton nuestro dispositivo BTLE Pulsado" );
+    public void botonBuscarNuestroDispositivoBTLEPulsado(View v) {
+        Log.d(ETIQUETA_LOG, " boton nuestro dispositivo BTLE Pulsado");
         //this.buscarEsteDispositivoBTLE( Utilidades.stringToUUID( "EPSG-GTI-PROY-3A" ) );
 
         //this.buscarEsteDispositivoBTLE( "EPSG-GTI-PROY-3A" );
         //llamamos metodo de la logica al pulsar el boton
-        this.buscarEsteDispositivoBTLE( "fistro" );
+        this.buscarEsteDispositivoBTLE("fistro");
 
     } // ()
 
     // --------------------------------------------------------------
+
     /**
      * Este método público se encarga de detener la busqueda de dispositivos gracias al boton que
      * pulsa el usuario.
@@ -290,14 +310,15 @@ public class MainActivity extends AppCompatActivity {
      */
     // --------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void botonDetenerBusquedaDispositivosBTLEPulsado(View v ) {
-        Log.d(ETIQUETA_LOG, " boton detener busqueda dispositivos BTLE Pulsado" );
+    public void botonDetenerBusquedaDispositivosBTLEPulsado(View v) {
+        Log.d(ETIQUETA_LOG, " boton detener busqueda dispositivos BTLE Pulsado");
 
         //llamamos metodo de la logica al pulsar el boton
         this.detenerBusquedaDispositivosBTLE();
     } // ()
 
     // --------------------------------------------------------------
+
     /**
      * Este método privado se encarga de inicializar el proceso de deteccion por bluetooth
      * Este metodo no recibe ni devuelve nada.
@@ -318,16 +339,16 @@ public class MainActivity extends AppCompatActivity {
         //lo activamos
         bta.enable();
 
-        Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): habilitado =  " + bta.isEnabled() );
+        Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): habilitado =  " + bta.isEnabled());
 
-        Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): estado =  " + bta.getState() );
+        Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): estado =  " + bta.getState());
 
         Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): obtenemos escaner btle ");
 
         //obtenemos el scanner
         this.elEscanner = bta.getBluetoothLeScanner();
 
-        if ( this.elEscanner == null ) {
+        if (this.elEscanner == null) {
             Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): Socorro: NO hemos obtenido escaner btle  !!!!");
 
         }
@@ -339,46 +360,136 @@ public class MainActivity extends AppCompatActivity {
                 ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
                         || ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED
                         || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        )
-        {
+        ) {
             ActivityCompat.requestPermissions(
                     MainActivity.this,
                     new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_FINE_LOCATION},
                     CODIGO_PETICION_PERMISOS);
-        }
-        else {
+        } else {
             Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): parece que YA tengo los permisos necesarios !!!!");
 
         }
     } // ()
 
+    /**
+     * Metodo para arrancar el servicio
+     *
+     * @param v {View} - Vista que le pasamos
+     */
+
+    public void botonArrancarServicioPulsado(View v) {
+        Log.d(ETIQUETA_LOG, " boton arrancar servicio Pulsado");
+
+        if (this.elIntentDelServicio != null) {
+            // ya estaba arrancado
+            return;
+        }
+
+        Log.d(ETIQUETA_LOG, " MainActivity.constructor : voy a arrancar el servicio");
+
+        this.elIntentDelServicio = new Intent(this, ServicioEscuharBeacons.class);
+
+        this.elIntentDelServicio.putExtra("tiempoDeEspera", (long) 5000);
+        startService(this.elIntentDelServicio);
+
+    } // ()
 
     // --------------------------------------------------------------
 
+    /**
+     * Método para detener el servicio
+     *
+     * @param v: {View}
+     *
+     * @return No devuelve nada
+     */
+    // --------------------------------------------------------------
+    public void botonDetenerServicioPulsado(View v) {
+
+        if (this.elIntentDelServicio == null) {
+            // no estaba arrancado
+            return;
+        }
+
+        stopService(this.elIntentDelServicio);
+
+        this.elIntentDelServicio = null;
+
+        Log.d(ETIQUETA_LOG, " boton detener servicio Pulsado");
 
 
-    public void guardarMedicion(View quien) {
+    } // ()
 
-            Log.d("clienterestandroid", "boton_enviar_pulsado");
+    // --------------------------------------------------------------
+
+    /**
+     * Método para obtener la latitud y la longitud
+     *
+     *
+     */
+    // --------------------------------------------------------------
+    public void obtenerLatitudLongitud() {
+
+        //HE TENIDO PROBLEMAS CON EL EMULADOR PARA
+        //OBTENER LA LATITUD Y LONGITUD REAL ASI QUE SERAN
+        //VALORES FIJOS
 
 
-            // ojo: creo que hay que crear uno nuevo cada vez
-            PeticionarioREST elPeticionario = new PeticionarioREST();
+        //este metodo en un futuro obtemndra la latitud y longitud del
+        //usuario que esta utilizando el movil
+        //por ahora atribuiremos la latitud y longitud de la EPSG
+
+        latitud =39.482369;
+        longitud  = -0.343578;
+    }
 
 
-            String textoJSON = "{\"Medicion\":\""+txtMediciones.getText()+"\", \"Longitud\":\""+txtLongitud.getText() +"\", \"Latitud\": \""+txtLatitud.getText()+"\"}";
-            elPeticionario.hacerPeticionREST("POST", "http://192.168.0.113/back_endSprint0/LogicaNegocio/guardarMedicion.php", textoJSON,
-                    new PeticionarioREST.RespuestaREST() {
-                        @Override
-                        public void callback(int codigo, String cuerpo) {
-                            textViewResultado.setText("codigo respuesta= " + codigo + " <-> \n" + cuerpo + "SE HA AÑADIDO EL NUMERO"+ txtMediciones.getText());
-                        }
-                    }
-            );
+    /**
+     * Metodo de guardar medicion que llama a la logica fake
+     *
+     * @param v {View} - Boton que se corresponde a la funcion
+     */
 
+    public void onClickBotonGuardarMediciones(View v){
+
+
+        Log.d("","Boton guardar medicion pulsado");
+
+        MedicionPOJO medicion = new MedicionPOJO(Integer.parseInt(txtMediciones.getText().toString()),latitud,longitud);
+
+        logicaFake.guardarMedicion(medicion);
+
+    }
+
+    /**
+     * Metodo de obtener las ultimas mediciones  que llama a la logica fake
+     *
+     * @param v {View} - Boton que se corresponde a la funcion
+     */
+
+    public void onClickBotonObtenerUltimasMediciones(View v){
+
+        Log.d("","Boton obtener ultimas pulsado");
+        logicaFake.obtenerUltimasMediciones(Integer.parseInt(txtCuantas.getText().toString()));
 
 
     }
+
+    /**
+     * Metodo de obtener todas las mediciones que llama a la logica fake
+     *
+     * @param v {View} - Boton que se corresponde a la funcion
+     */
+
+    public void onClickBotonObtenerTodasLasMediciones(View v){
+
+        Log.d("","Boton obtener todas pulsado");
+        logicaFake.obtenerTodasLasMediciones();
+
+    }
+
+
+
 
 
 
@@ -393,7 +504,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //establecemos la vista
         setContentView(R.layout.activity_main);
-
+        //obtenemos latitud y longitud
+        obtenerLatitudLongitud();
         Log.d(ETIQUETA_LOG, " onCreate(): empieza ");
 
         inicializarBlueTooth();//llamamos metodo para inicializar el BlueTooth
@@ -401,9 +513,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " onCreate(): termina ");
 
         txtMediciones = findViewById(R.id.txtMediciones);
-        txtLatitud = findViewById(R.id.txtLatitud);
-        txtLongitud = findViewById(R.id.txtLongitud);
-        textViewResultado = findViewById(R.id.textViewResultado);
+        txtCuantas = findViewById(R.id.editTextCuantasMediciones);
+
+
+
 
     } // onCreate()
 
