@@ -30,7 +30,7 @@ public  class LogicaFake extends AppCompatActivity {
 
     public void guardarMedicion(MedicionPOJO medicion){
 
-        Log.d("clienterestandroid", "boton_enviar_pulsado");
+
 
 
         // ojo: creo que hay que crear uno nuevo cada vez
@@ -38,7 +38,7 @@ public  class LogicaFake extends AppCompatActivity {
 
 
         String textoJSON = "{\"Medicion\":\""+medicion.getMedicion()+"\", \"Longitud\":\""+medicion.getLongitud() +"\", \"Latitud\": \""+medicion.getLatitud()+"\"}";
-        elPeticionario.hacerPeticionREST("POST", "http://192.168.1.41/back_endSprint0/LogicaNegocio/guardarMedicion.php", textoJSON,
+        elPeticionario.hacerPeticionREST("POST", "http://192.168.0.112/back_endSprint0/LogicaNegocio/guardarMedicion.php", textoJSON,
                 new PeticionarioREST.RespuestaREST() {
                     @Override
                     public void callback(int codigo, String cuerpo) {

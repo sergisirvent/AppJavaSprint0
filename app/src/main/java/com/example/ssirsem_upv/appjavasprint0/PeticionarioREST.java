@@ -30,6 +30,7 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
     }
 
     // --------------------------------------------------------------------
+    //atributos privados de la clase
     // --------------------------------------------------------------------
     private String elMetodo;
     private String urlDestino;
@@ -40,6 +41,15 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
     private String cuerpoRespuesta = "";
 
     // --------------------------------------------------------------------
+
+    /**
+     * Método que se utiliza para realizar una petición REST
+     *
+     * @param metodo
+     * @param urlDestino
+     * @param cuerpo
+     * @param laRespuesta
+     */
     // --------------------------------------------------------------------
     public void hacerPeticionREST (String metodo, String urlDestino, String cuerpo, RespuestaREST  laRespuesta) {
         this.elMetodo = metodo;
@@ -51,12 +61,20 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
     }
 
     // --------------------------------------------------------------------
+    //constructor de la clase
     // --------------------------------------------------------------------
     public PeticionarioREST() {
         Log.d("clienterestandroid", "constructor()");
     }
 
     // --------------------------------------------------------------------
+
+    /**
+     *
+     * Método de la clase para identificar que tipo de petición REST se ejecutará
+     * @param params
+     * @return
+     */
     // --------------------------------------------------------------------
     @Override
     protected Boolean doInBackground(Void... params) {
@@ -136,6 +154,13 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
     } // ()
 
     // --------------------------------------------------------------------
+
+    /**
+     * Método de la clase que se encarga de comprobar cual ha sido la respuesta al
+     * proceso
+     *
+     * @param comoFue
+     */
     // --------------------------------------------------------------------
     protected void onPostExecute(Boolean comoFue) {
         // llamado tras doInBackground()

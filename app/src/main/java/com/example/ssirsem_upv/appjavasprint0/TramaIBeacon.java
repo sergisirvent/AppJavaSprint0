@@ -1,5 +1,5 @@
 
-package com.example.ssirsem_upv.appjavasprint0.Ejemplos;
+package com.example.ssirsem_upv.appjavasprint0;
 
 import java.util.Arrays;
 
