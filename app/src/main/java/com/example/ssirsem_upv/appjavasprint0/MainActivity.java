@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -434,13 +435,39 @@ public class MainActivity extends AppCompatActivity {
         //OBTENER LA LATITUD Y LONGITUD REAL ASI QUE SERAN
         //VALORES FIJOS
 
+        //Por ahora como el emulador devuelve una latitud y longitud NULL, le paso a los
+        //atributos la latitud y longitud de la EPSG
 
-        //este metodo en un futuro obtemndra la latitud y longitud del
-        //usuario que esta utilizando el movil
-        //por ahora atribuiremos la latitud y longitud de la EPSG
 
-        latitud =39.482369;
-        longitud  = -0.343578;
+        locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (loc==null){
+
+                //Como tengo problemas con el emulador aqui le atribuyo los valores fijos de la
+                //latitud y longitud de la EPSG
+
+                latitud =39.482369;
+                longitud  = -0.343578;
+
+            }else{
+                latitud = loc.getLatitude();
+                longitud = loc.getLongitude();
+            }
+        }
+
+
     }
 
 
@@ -452,12 +479,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickBotonGuardarMediciones(View v){
 
-
         Log.d("","Boton guardar medicion pulsado");
+        if(txtMediciones.getText().toString().equals("")){
+            Toast.makeText(this,"Introduce un valor de medicion", Toast.LENGTH_SHORT).show();
+        }else {
 
-        MedicionPOJO medicion = new MedicionPOJO(Integer.parseInt(txtMediciones.getText().toString()),latitud,longitud);
 
-        logicaFake.guardarMedicion(medicion);
+
+            MedicionPOJO medicion = new MedicionPOJO(Integer.parseInt(txtMediciones.getText().toString()),latitud,longitud);
+
+            logicaFake.guardarMedicion(medicion);
+        }
+
 
     }
 
@@ -468,9 +501,15 @@ public class MainActivity extends AppCompatActivity {
      */
 
     public void onClickBotonObtenerUltimasMediciones(View v){
-
         Log.d("","Boton obtener ultimas pulsado");
-        logicaFake.obtenerUltimasMediciones(Integer.parseInt(txtCuantas.getText().toString()));
+
+        if (txtCuantas.getText().toString().equals("")){
+            Toast.makeText(this,"Introduce un valor de cuantas mediciones quieres", Toast.LENGTH_SHORT).show();
+        }else{
+
+            logicaFake.obtenerUltimasMediciones(Integer.parseInt(txtCuantas.getText().toString()));
+        }
+
 
 
     }
