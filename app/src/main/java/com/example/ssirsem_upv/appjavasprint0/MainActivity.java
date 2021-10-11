@@ -31,6 +31,9 @@ import androidx.core.content.ContextCompat;
 import com.example.ssirsem_upv.appjavasprint0.LogicaFake.LogicaFake;
 import com.example.ssirsem_upv.appjavasprint0.Utilidades.Utilidades;
 
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 // ------------------------------------------------------------------
@@ -483,14 +486,17 @@ public class MainActivity extends AppCompatActivity {
         if(txtMediciones.getText().toString().equals("")){
             Toast.makeText(this,"Introduce un valor de medicion", Toast.LENGTH_SHORT).show();
         }else {
-
-
-
             MedicionPOJO medicion = new MedicionPOJO(Integer.parseInt(txtMediciones.getText().toString()),latitud,longitud);
-
             logicaFake.guardarMedicion(medicion);
         }
 
+        //Para abrir la nueva actividad
+        Intent intent = new Intent(this, MostrarMedicionesActivity.class);
+        EditText editText = (EditText) findViewById(R.id.txtMediciones);
+        String message = editText.getText().toString();
+        intent.putExtra("Mensaje", message);
+        intent.putExtra("MetodoUtilizado","1");
+        startActivity(intent);
 
     }
 
@@ -520,10 +526,11 @@ public class MainActivity extends AppCompatActivity {
      * @param v {View} - Boton que se corresponde a la funcion
      */
 
-    public void onClickBotonObtenerTodasLasMediciones(View v){
+    public void onClickBotonObtenerTodasLasMediciones(View v) throws JSONException {
 
         Log.d("","Boton obtener todas pulsado");
-        logicaFake.obtenerTodasLasMediciones();
+        ArrayList<MedicionPOJO> listaM = logicaFake.obtenerTodasLasMediciones();
+        //Log.d("resul",listaM.toString());
 
     }
 
