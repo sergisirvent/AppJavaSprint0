@@ -7,9 +7,11 @@
 
     <TextView
         android:id="@+id/tVMediciones"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
         android:text="TextView"
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/volverBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +24,6 @@
         android:onClick="volverMain"
         android:text="Volver"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tVMediciones"
-        app:layout_constraintStart_toStartOf="@+id/tVMediciones"
-        app:layout_constraintTop_toBottomOf="@+id/tVMediciones" />
+        app:layout_constraintTop_toBottomOf="@+id/tVMediciones"
+        tools:layout_editor_absoluteX="160dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

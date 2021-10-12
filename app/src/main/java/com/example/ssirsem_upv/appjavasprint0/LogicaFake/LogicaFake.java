@@ -1,9 +1,12 @@
 package com.example.ssirsem_upv.appjavasprint0.LogicaFake;
 
+import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ssirsem_upv.appjavasprint0.MainActivity;
 import com.example.ssirsem_upv.appjavasprint0.MedicionPOJO;
 import com.example.ssirsem_upv.appjavasprint0.PeticionarioREST;
 
@@ -16,15 +19,7 @@ import java.util.List;
 
 public  class LogicaFake extends AppCompatActivity {
 
-    private ArrayList<MedicionPOJO> listaMediciones;
 
-    public ArrayList<MedicionPOJO> getListaMediciones() {
-        return listaMediciones;
-    }
-
-    public void setListaMediciones(ArrayList<MedicionPOJO> listaMediciones) {
-        this.listaMediciones = listaMediciones;
-    }
 
     /**
      *
@@ -74,13 +69,17 @@ public  class LogicaFake extends AppCompatActivity {
      *
      * Método que devuelve todas las mediciones de la bbdd
      *
-     * @return listaCuantas {Lista<MedicionPOJO>} - Lista de todas las mediciones de la bbdd
+     * @param v {Contexto} - Contexto de mainActivity para utilizar sus metodos
+     *
+     * @return listaCuantas {Lista<MedicionPOJO>} - Lista de todas las mediciones de la bbdd, no la devuelve exactamente pero modifica
+     * la lista global de mainActivity
      */
 
-    public ArrayList<MedicionPOJO> obtenerTodasLasMediciones(){
+    public void obtenerTodasLasMediciones(Context v){
 
-        ArrayList<MedicionPOJO> listaTodas = new ArrayList<>();
-        ArrayList<String> listaStrings = new ArrayList<>();
+        //declaramos las listas que rellenaremos y el objeto peticionario para la peticion
+        List<MedicionPOJO> listaTodas = new ArrayList<>();
+        List<String> listaStrings = new ArrayList<>();
         PeticionarioREST elPeticionario = new PeticionarioREST();
         Log.d("orden","1");
 
@@ -91,9 +90,11 @@ public  class LogicaFake extends AppCompatActivity {
                 Log.d("orden","2");
                 //Log.d("respuesta",cuerpo);
 
+                //probamos a convertir la string procedente de la bbdd a jsonarray
                 try {
                     JSONArray arrayJSON = new JSONArray(cuerpo);
                     for (int i = 0;i<arrayJSON.length();i++){
+                        //llenamos cada posicion de la lista de strings con una string que equivale a un objeto medicion
                         listaStrings.add(arrayJSON.getString(i));
                         //Log.d("cuerpoDentro",arrayJSON.getString(i));
                     }
@@ -102,6 +103,8 @@ public  class LogicaFake extends AppCompatActivity {
                 }
 
 
+                //ahora por cada string en listaStrings creamos un objeto medicion y lo añadimos a la lista
+                //de mediciones que enviaremos a main activity
                 for (String s :listaStrings
                 ) {
 
@@ -112,14 +115,15 @@ public  class LogicaFake extends AppCompatActivity {
                     listaTodas.add(medicionPOJO);
                     //Log.d("lista",listaTodas.toString());
                 }
-                setListaMediciones(listaTodas);
-                Log.d("listaProcesada",listaTodas.toString());
 
+                Log.d("listaProcesada",listaTodas.toString());
+                //enviamos la lista procesada
+                ((MainActivity)v).settearLista(listaTodas);
 
             }
         });
         Log.d("orden","3");
-        return listaTodas;
+
 
 
 
