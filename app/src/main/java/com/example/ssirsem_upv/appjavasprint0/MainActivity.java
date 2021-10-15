@@ -31,6 +31,10 @@ import androidx.core.content.ContextCompat;
 import com.example.ssirsem_upv.appjavasprint0.LogicaFake.LogicaFake;
 import com.example.ssirsem_upv.appjavasprint0.Utilidades.Utilidades;
 
+import org.json.JSONException;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 // ------------------------------------------------------------------
@@ -72,7 +76,15 @@ public class MainActivity extends AppCompatActivity {
 
     private Intent elIntentDelServicio = null;
 
+    private List<MedicionPOJO> listaMediciones;
 
+    public List<MedicionPOJO> getListaMediciones() {
+        return listaMediciones;
+    }
+
+    public void setListaMediciones(List<MedicionPOJO> listaMediciones) {
+        this.listaMediciones = listaMediciones;
+    }
     // --------------------------------------------------------------
 
     /**
@@ -483,12 +495,9 @@ public class MainActivity extends AppCompatActivity {
         if(txtMediciones.getText().toString().equals("")){
             Toast.makeText(this,"Introduce un valor de medicion", Toast.LENGTH_SHORT).show();
         }else {
-
-
-
             MedicionPOJO medicion = new MedicionPOJO(Integer.parseInt(txtMediciones.getText().toString()),latitud,longitud);
-
             logicaFake.guardarMedicion(medicion);
+            Toast.makeText(this, "Se ha añadido la medicion con valor: "+ txtMediciones.getText().toString(), Toast.LENGTH_SHORT).show();
         }
 
 
@@ -507,7 +516,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Introduce un valor de cuantas mediciones quieres", Toast.LENGTH_SHORT).show();
         }else{
 
-            logicaFake.obtenerUltimasMediciones(Integer.parseInt(txtCuantas.getText().toString()));
+            logicaFake.obtenerUltimasMediciones(Integer.parseInt(txtCuantas.getText().toString()),this);
         }
 
 
@@ -520,15 +529,39 @@ public class MainActivity extends AppCompatActivity {
      * @param v {View} - Boton que se corresponde a la funcion
      */
 
-    public void onClickBotonObtenerTodasLasMediciones(View v){
+    public void onClickBotonObtenerTodasLasMediciones(View v) throws JSONException {
 
         Log.d("","Boton obtener todas pulsado");
-        logicaFake.obtenerTodasLasMediciones();
+        logicaFake.obtenerTodasLasMediciones(this);
+        //Log.d("resul",listaM.toString());
 
     }
 
 
+    /**
+     * Metodo que se encarga de settear lso valores procedentes de la logica fake
+     * a la lista global de main activity
+     *
+     * @param listaMediciones
+     */
+    public void settearLista(List<MedicionPOJO> listaMediciones){
 
+        Log.d("resul",listaMediciones.toString());
+        setListaMediciones(listaMediciones);
+        Log.d("resul2",this.listaMediciones.toString());
+
+
+        List<MedicionPOJO> object = getListaMediciones();
+        Log.d("size",String.valueOf(object.size()));
+
+
+        Intent intent = new Intent(this, MostrarMedicionesActivity.class);
+        intent.putExtra("miLista", (Serializable) object);
+        intent.putExtra("MetodoUtilizado","2");
+        startActivity(intent);
+
+
+    }
 
 
 

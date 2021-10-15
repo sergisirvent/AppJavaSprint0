@@ -1,6 +1,8 @@
 package com.example.ssirsem_upv.appjavasprint0;
 
-public class MedicionPOJO {
+import java.io.Serializable;
+
+public class MedicionPOJO implements Serializable {
 
     //atributos privados de la clase
 

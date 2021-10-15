@@ -8,8 +8,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+
 import android.os.AsyncTask;
 import android.util.Log;
+
+import org.json.JSONException;
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
@@ -26,7 +30,8 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
      */
     // --------------------------------------------------------------------
     public interface RespuestaREST {
-        void callback (int codigo, String cuerpo);
+        void callback (int codigo, String cuerpo) throws JSONException;
+
     }
 
     // --------------------------------------------------------------------
@@ -109,6 +114,11 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
                 dos.close();
             }
 
+
+
+
+
+            ///////////////////////////////////////////////////////////////////////////////////////////
             // ya he enviado la peticin
             Log.d("clienterestandroid", "doInBackground(): peticin enviada ");
 
@@ -165,7 +175,12 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
     protected void onPostExecute(Boolean comoFue) {
         // llamado tras doInBackground()
         Log.d("clienterestandroid", "onPostExecute() comoFue = " + comoFue);
-        this.laRespuesta.callback(this.codigoRespuesta, this.cuerpoRespuesta);
+        try {
+            this.laRespuesta.callback(this.codigoRespuesta, this.cuerpoRespuesta);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 } // class
