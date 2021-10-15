@@ -114,6 +114,11 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
                 dos.close();
             }
 
+
+
+
+
+            ///////////////////////////////////////////////////////////////////////////////////////////
             // ya he enviado la peticin
             Log.d("clienterestandroid", "doInBackground(): peticin enviada ");
 

@@ -497,15 +497,9 @@ public class MainActivity extends AppCompatActivity {
         }else {
             MedicionPOJO medicion = new MedicionPOJO(Integer.parseInt(txtMediciones.getText().toString()),latitud,longitud);
             logicaFake.guardarMedicion(medicion);
+            Toast.makeText(this, "Se ha añadido la medicion con valor: "+ txtMediciones.getText().toString(), Toast.LENGTH_SHORT).show();
         }
 
-        //Para abrir la nueva actividad
-        Intent intent = new Intent(this, MostrarMedicionesActivity.class);
-        EditText editText = (EditText) findViewById(R.id.txtMediciones);
-        String message = editText.getText().toString();
-        intent.putExtra("Mensaje", message);
-        intent.putExtra("MetodoUtilizado","1");
-        startActivity(intent);
 
     }
 
@@ -522,7 +516,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Introduce un valor de cuantas mediciones quieres", Toast.LENGTH_SHORT).show();
         }else{
 
-            logicaFake.obtenerUltimasMediciones(Integer.parseInt(txtCuantas.getText().toString()));
+            logicaFake.obtenerUltimasMediciones(Integer.parseInt(txtCuantas.getText().toString()),this);
         }
 
 
@@ -540,8 +534,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d("","Boton obtener todas pulsado");
         logicaFake.obtenerTodasLasMediciones(this);
         //Log.d("resul",listaM.toString());
-
-
 
     }
 
