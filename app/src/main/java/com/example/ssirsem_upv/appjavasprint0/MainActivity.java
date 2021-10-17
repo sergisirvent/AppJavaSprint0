@@ -29,9 +29,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.ssirsem_upv.appjavasprint0.LogicaFake.LogicaFake;
+import com.example.ssirsem_upv.appjavasprint0.Test.LogicaFakeTest;
 import com.example.ssirsem_upv.appjavasprint0.Utilidades.Utilidades;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -64,24 +67,35 @@ public class MainActivity extends AppCompatActivity {
     EditText txtMediciones;
     EditText txtCuantas;
 
+    //Invocamos a la logica fake para usar sus metodos
     LogicaFake logicaFake = new LogicaFake();
 
     //variables para el metodo de obtener la localizacion
 
     private LocationManager locManager;
     public Location loc;
-
     private double longitud;
     private double latitud;
 
+    //variables para el servicio de beacons
     private Intent elIntentDelServicio = null;
 
+    //Lista interna de mediciones con su getter y su setter
     private List<MedicionPOJO> listaMediciones;
 
+    /**
+     * Getter del atributo privado ListaMediciones
+     *
+     * @return {Lista<MedicionPOJO>} - Lista de mediciones devuelta
+     */
     public List<MedicionPOJO> getListaMediciones() {
         return listaMediciones;
     }
-
+    /**
+     * Setter del atributo privado ListaMediciones
+     *
+     * @param  listaMediciones {Lista<MedicionPOJO>} - Lista de mediciones que quieres settear al atributo
+     */
     public void setListaMediciones(List<MedicionPOJO> listaMediciones) {
         this.listaMediciones = listaMediciones;
     }
@@ -547,23 +561,69 @@ public class MainActivity extends AppCompatActivity {
     public void settearLista(List<MedicionPOJO> listaMediciones){
 
         Log.d("resul",listaMediciones.toString());
+        //seteamos la nueva lista como lista atributo
         setListaMediciones(listaMediciones);
         Log.d("resul2",this.listaMediciones.toString());
 
-
+        //lista para pasar en el intent
         List<MedicionPOJO> object = getListaMediciones();
         Log.d("size",String.valueOf(object.size()));
 
-
+        //creamos el intent y le pasamos la lista para que se abra la actividad MostrarMedicionesActivity
         Intent intent = new Intent(this, MostrarMedicionesActivity.class);
         intent.putExtra("miLista", (Serializable) object);
-        intent.putExtra("MetodoUtilizado","2");
         startActivity(intent);
 
 
     }
 
+    /**
+     * Método que se encarga de procesar los datos procedentes de los metodos que utilizan GET en la
+     * logica fake. Recibe una string de objetos JSON y acaba pasando una lista de mediciones a settearLista
+     *
+     *
+     * @param cuerpo
+     * @throws JSONException
+     */
 
+    public void procesarDatosGet(String cuerpo) throws JSONException {
+
+        List<MedicionPOJO> listaTodas = new ArrayList<>();
+        List<String> listaStrings = new ArrayList<>();
+
+        //probamos a convertir la string procedente de la bbdd a jsonarray
+        try {
+            //Log.d("arrayJson", "entro al procesar");
+            //Log.d("arrayJson","----------------"+cuerpo.toString());
+            JSONArray arrayJSON = new JSONArray(cuerpo);
+            for (int i = 0;i<arrayJSON.length();i++){
+                Log.d("arrayJson", "entro al bucle");
+                //llenamos cada posicion de la lista de strings con una string que equivale a un objeto medicion
+                listaStrings.add(arrayJSON.getString(i));
+                //Log.d("cuerpoDentro",arrayJSON.getString(i));
+            }
+        }catch (JSONException errorJSON){
+            Log.d("errorJSON","No se ha podido convertir la array de JSON");
+        }
+
+
+        //ahora por cada string en listaStrings creamos un objeto medicion y lo añadimos a la lista
+        //de mediciones que enviaremos a main activity
+        for (String s :listaStrings
+        ) {
+
+            JSONObject object = new JSONObject(s);
+
+            MedicionPOJO medicionPOJO = new MedicionPOJO(object.getInt("Medicion"),object.getDouble("Latitud"),object.getDouble("Longitud"));
+            //Log.d("hola",String.valueOf(object.getInt("Medicion")));
+            listaTodas.add(medicionPOJO);
+            //Log.d("lista",listaTodas.toString());
+        }
+
+        Log.d("listaProcesada",listaTodas.toString());
+        //enviamos la lista procesada
+        settearLista(listaTodas);
+    }
 
     /**
      *
@@ -587,8 +647,26 @@ public class MainActivity extends AppCompatActivity {
         txtMediciones = findViewById(R.id.txtMediciones);
         txtCuantas = findViewById(R.id.editTextCuantasMediciones);
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /*
+         * TEST LOGICA
+         * 1.NO SE PUEDEN HACER LOS DOS TEST A LA VEZ
+         * 2.SE DESCOMENTA UNO Y SE HACE
+         * 3.AL FINALIZAR EL TEST EJECUTAR EN POSTMAN DELETE FROM `mediciones` WHERE `Medicion`=23
+         *
+         */
+        //LogicaFakeTest testLogica = new LogicaFakeTest();
+
+        //TEST 1 - PRUEBA GUARDARMEDICION() Y OBTENERTODASLASMEDICIONES()
+        //testLogica.hacerTestGuardarMedicionYObtenerTodas();
+
+        //TEST 2 - PRUEBA OBTENERULTIMASMEDICIONES()
+        //testLogica.hacerTestObtenerUltimasLasMediciones();
 
 
+
+
+        /////////////////////////////////////////////////////////////////////////////////////
 
     } // onCreate()
 

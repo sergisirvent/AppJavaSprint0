@@ -30,15 +30,18 @@ public  class LogicaFake extends AppCompatActivity {
 
     public void guardarMedicion(MedicionPOJO medicion){
 
-        // ojo: creo que hay que crear uno nuevo cada vez
+        // Creamos un objeto peticionarioRest para utilizar sus metodos
         PeticionarioREST elPeticionario = new PeticionarioREST();
 
 
+        //definimos el cuerpo de nuestra peticion
         String textoJSON = "{\"Medicion\":\""+medicion.getMedicion()+"\", \"Longitud\":\""+medicion.getLongitud() +"\", \"Latitud\": \""+medicion.getLatitud()+"\"}";
-        elPeticionario.hacerPeticionREST("POST", "http://10.236.52.203/back_endSprint0/LogicaNegocio/guardarMedicion.php", textoJSON,
+        //montamos la peticion y la enviamos
+        elPeticionario.hacerPeticionREST("POST", "http://192.168.1.43/back_endSprint0/LogicaNegocio/guardarMedicion.php", textoJSON,
                 new PeticionarioREST.RespuestaREST() {
                     @Override
                     public void callback(int codigo, String cuerpo) {
+                        //si ha sido correcta la operacion
                         Log.d("","Medición subida correctamente a la base de datos");
                     }
                 }
@@ -55,25 +58,31 @@ public  class LogicaFake extends AppCompatActivity {
      * @param cuantas {Z} - Numero de mediciones que contendrá la lista
      * @param v {Contexto} - Contexto de mainActivity para utilizar sus metodos
      *
-     * Devuelve la lista de mediciones al main activity mediante el metodo settearLista, ya que los
-     * datos vienen desde un callback referente a RespuestaREST
+     * Utilizamos el metodo de procesarDatosGet para enviar lso datos a mainActivity
      *
      */
 
     public void obtenerUltimasMediciones(int cuantas, Context v){
 
-        Log.d("Entrar","entro a obtener ultimas mediciones");
+        //Log.d("Entrar","entro a obtener ultimas mediciones");
+        // Creamos un objeto peticionarioRest para utilizar sus metodos
         PeticionarioREST elPeticionario = new PeticionarioREST();
 
-        //hacemos la peticion REST
+        //definimos el cuerpo de nuestra peticion
         String textoJSON = "{'Cuantas': '" + cuantas + "' }";
-        elPeticionario.hacerPeticionREST("GET", "http://10.236.52.203/back_endSprint0/LogicaNegocio/obtenerUltimasMediciones.php?Cuantas="+cuantas+"", null, new PeticionarioREST.RespuestaREST() {
+        //montamos la peticion y la enviamos
+        elPeticionario.hacerPeticionREST("GET", "http://192.168.1.43/back_endSprint0/LogicaNegocio/obtenerUltimasMediciones.php?Cuantas="+cuantas+"", null, new PeticionarioREST.RespuestaREST() {
             @Override
             public void callback(int codigo, String cuerpo) throws JSONException {
                 try {
-                    Log.d("cuerpoRecibidoPHP",cuerpo);
-                    procesarDatosGet(cuerpo,v);
+
+                    //Log.d("cuerpoRecibidoPHP",cuerpo);
+
+                    //si ha sido correcta la operacion procesamos los datos
+                    ((MainActivity)v).procesarDatosGet(cuerpo);
+
                 }catch (JSONException e){
+
                     Log.d("JsonException","Error JSON");
                     throw e;
                 }
@@ -91,59 +100,39 @@ public  class LogicaFake extends AppCompatActivity {
      *
      * @param v {Contexto} - Contexto de mainActivity para utilizar sus metodos
      *
-     *Devuelve la lista de mediciones al main activity mediante el metodo settearLista, ya que los
-     *datos vienen desde un callback referente a RespuestaREST
+     *Utilizamos el metodo de procesarDatosGet para enviar lso datos a mainActivity
      */
 
     public void obtenerTodasLasMediciones(Context v){
 
-        //declaramos las listas que rellenaremos y el objeto peticionario para la peticion
-        List<MedicionPOJO> listaTodas = new ArrayList<>();
-        List<String> listaStrings = new ArrayList<>();
+        // Creamos un objeto peticionarioRest para utilizar sus metodos
         PeticionarioREST elPeticionario = new PeticionarioREST();
-        Log.d("orden","1");
+        //Log.d("orden","1");
 
         //hacemos la peticion REST
-        elPeticionario.hacerPeticionREST("GET", "http://10.236.52.203/back_endSprint0/LogicaNegocio/obtenerTodasLasMediciones.php", null, new PeticionarioREST.RespuestaREST() {
+        elPeticionario.hacerPeticionREST("GET", "http://192.168.1.43/back_endSprint0/LogicaNegocio/obtenerTodasLasMediciones.php", null, new PeticionarioREST.RespuestaREST() {
 
             @Override
             public void callback(int codigo, String cuerpo) throws JSONException {
-                Log.d("orden","2");
+                //Log.d("orden","2");
                 //Log.d("respuesta",cuerpo);
 
-                //probamos a convertir la string procedente de la bbdd a jsonarray
                 try {
-                    JSONArray arrayJSON = new JSONArray(cuerpo);
-                    for (int i = 0;i<arrayJSON.length();i++){
-                        //llenamos cada posicion de la lista de strings con una string que equivale a un objeto medicion
-                        listaStrings.add(arrayJSON.getString(i));
-                        //Log.d("cuerpoDentro",arrayJSON.getString(i));
-                    }
-                }catch (JSONException errorJSON){
-                    Log.d("errorJSON","No se ha podido convertir la array de JSON");
+                    //Log.d("cuerpoRecibidoPHP",cuerpo);
+
+                    //si ha sido correcta la operacion procesamos los datos
+                    ((MainActivity)v).procesarDatosGet(cuerpo);
+                }catch (JSONException e){
+                    Log.d("JsonException","Error JSON");
+                    throw e;
                 }
 
 
-                //ahora por cada string en listaStrings creamos un objeto medicion y lo añadimos a la lista
-                //de mediciones que enviaremos a main activity
-                for (String s :listaStrings
-                ) {
 
-                    JSONObject object = new JSONObject(s);
-
-                    MedicionPOJO medicionPOJO = new MedicionPOJO(object.getInt("Medicion"),object.getDouble("Latitud"),object.getDouble("Longitud"));
-                    //Log.d("hola",String.valueOf(object.getInt("Medicion")));
-                    listaTodas.add(medicionPOJO);
-                    //Log.d("lista",listaTodas.toString());
-                }
-
-                Log.d("listaProcesada",listaTodas.toString());
-                //enviamos la lista procesada
-                ((MainActivity)v).settearLista(listaTodas);
 
             }
         });
-        Log.d("orden","3");
+        //Log.d("orden","3");
 
 
 
@@ -151,43 +140,6 @@ public  class LogicaFake extends AppCompatActivity {
 
     }
 
-    public void procesarDatosGet(String cuerpo , Context v) throws JSONException {
 
-        List<MedicionPOJO> listaTodas = new ArrayList<>();
-        List<String> listaStrings = new ArrayList<>();
-
-        //probamos a convertir la string procedente de la bbdd a jsonarray
-        try {
-            Log.d("arrayJson", "entro al procesar");
-            Log.d("arrayJson","----------------"+cuerpo.toString());
-            JSONArray arrayJSON = new JSONArray(cuerpo);
-            for (int i = 0;i<arrayJSON.length();i++){
-                Log.d("arrayJson", "entro al bucle");
-                //llenamos cada posicion de la lista de strings con una string que equivale a un objeto medicion
-                listaStrings.add(arrayJSON.getString(i));
-                //Log.d("cuerpoDentro",arrayJSON.getString(i));
-            }
-        }catch (JSONException errorJSON){
-            Log.d("errorJSON","No se ha podido convertir la array de JSON");
-        }
-
-
-        //ahora por cada string en listaStrings creamos un objeto medicion y lo añadimos a la lista
-        //de mediciones que enviaremos a main activity
-        for (String s :listaStrings
-        ) {
-
-            JSONObject object = new JSONObject(s);
-
-            MedicionPOJO medicionPOJO = new MedicionPOJO(object.getInt("Medicion"),object.getDouble("Latitud"),object.getDouble("Longitud"));
-            //Log.d("hola",String.valueOf(object.getInt("Medicion")));
-            listaTodas.add(medicionPOJO);
-            //Log.d("lista",listaTodas.toString());
-        }
-
-        Log.d("listaProcesada",listaTodas.toString());
-        //enviamos la lista procesada
-        ((MainActivity)v).settearLista(listaTodas);
-    }
 
 }
