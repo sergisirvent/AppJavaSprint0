@@ -1,3 +1,11 @@
+/*
+*
+ *LogicaFake.java
+ *Fecha: 2021/09
+ *Autor: Sergi Sirvent Sempere
+ *
+ *Clase encargada de llamar desde android a los metodos de la logica real de negocio
+ */
 package com.example.ssirsem_upv.appjavasprint0.LogicaFake;
 
 import android.content.Context;
@@ -37,7 +45,7 @@ public  class LogicaFake extends AppCompatActivity {
         //definimos el cuerpo de nuestra peticion
         String textoJSON = "{\"Medicion\":\""+medicion.getMedicion()+"\", \"Longitud\":\""+medicion.getLongitud() +"\", \"Latitud\": \""+medicion.getLatitud()+"\" , \"Major\": \""+medicion.getMajor()+"\" , \"Minor\": \""+medicion.getMinor()+"\"}";
         //montamos la peticion y la enviamos
-        elPeticionario.hacerPeticionREST("POST", "http://10.236.52.203/back_endSprint0/src/LogicaNegocio/guardarMedicion.php", textoJSON,
+        elPeticionario.hacerPeticionREST("POST", "http://172.20.10.9/back_endSprint0/src/LogicaNegocio/guardarMedicion.php", textoJSON,
                 new PeticionarioREST.RespuestaREST() {
                     @Override
                     public void callback(int codigo, String cuerpo) {
@@ -71,7 +79,7 @@ public  class LogicaFake extends AppCompatActivity {
         //definimos el cuerpo de nuestra peticion
         String textoJSON = "{'Cuantas': '" + cuantas + "' }";
         //montamos la peticion y la enviamos
-        elPeticionario.hacerPeticionREST("GET", "http://10.236.52.203/back_endSprint0/src/LogicaNegocio/obtenerUltimasMediciones.php?Cuantas="+cuantas+"", null, new PeticionarioREST.RespuestaREST() {
+        elPeticionario.hacerPeticionREST("GET", "http://172.20.10.9/back_endSprint0/src/LogicaNegocio/obtenerUltimasMediciones.php?Cuantas="+cuantas+"", null, new PeticionarioREST.RespuestaREST() {
             @Override
             public void callback(int codigo, String cuerpo) throws JSONException {
                 try {
@@ -110,7 +118,7 @@ public  class LogicaFake extends AppCompatActivity {
         //Log.d("orden","1");
 
         //hacemos la peticion REST
-        elPeticionario.hacerPeticionREST("GET", "http://10.236.52.203/back_endSprint0/src/LogicaNegocio/obtenerTodasLasMediciones.php", null, new PeticionarioREST.RespuestaREST() {
+        elPeticionario.hacerPeticionREST("GET", "http://172.20.10.9/back_endSprint0/src/LogicaNegocio/obtenerTodasLasMediciones.php", null, new PeticionarioREST.RespuestaREST() {
 
             @Override
             public void callback(int codigo, String cuerpo) throws JSONException {

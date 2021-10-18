@@ -1,4 +1,12 @@
 package com.example.ssirsem_upv.appjavasprint0;
+/*
+ *
+ *MainActivity.java
+ *Fecha: 2021/09
+ *Autor: Sergi Sirvent Sempere
+ *
+ *Clase encargada de contener la actividad principal de la aplicacion
+ */
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
 
@@ -29,7 +37,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.ssirsem_upv.appjavasprint0.LogicaFake.LogicaFake;
-import com.example.ssirsem_upv.appjavasprint0.Test.LogicaFakeTest;
+
 import com.example.ssirsem_upv.appjavasprint0.Utilidades.Utilidades;
 
 import org.json.JSONArray;
@@ -655,26 +663,7 @@ public class MainActivity extends AppCompatActivity {
         txtMediciones = findViewById(R.id.txtMediciones);
         txtCuantas = findViewById(R.id.editTextCuantasMediciones);
 
-        /////////////////////////////////////////////////////////////////////////////////////
-        /*
-         * TEST LOGICA
-         * 1.NO SE PUEDEN HACER LOS DOS TEST A LA VEZ
-         * 2.SE DESCOMENTA UNO Y SE HACE
-         * 3.AL FINALIZAR EL TEST EJECUTAR EN POSTMAN DELETE FROM `mediciones` WHERE `Medicion`=23
-         *
-         */
-        //LogicaFakeTest testLogica = new LogicaFakeTest();
 
-        //TEST 1 - PRUEBA GUARDARMEDICION() Y OBTENERTODASLASMEDICIONES()
-        //testLogica.hacerTestGuardarMedicionYObtenerTodas();
-
-        //TEST 2 - PRUEBA OBTENERULTIMASMEDICIONES()
-        //testLogica.hacerTestObtenerUltimasLasMediciones();
-
-
-
-
-        /////////////////////////////////////////////////////////////////////////////////////
 
     } // onCreate()
 

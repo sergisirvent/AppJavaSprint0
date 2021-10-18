@@ -1,4 +1,11 @@
-
+/*
+ *
+ *TramaIBeacon.java
+ *Fecha: 2021/09
+ *Autor: Sergi Sirvent Sempere
+ *
+ *Clase encargada de tratar los datos procedentes de la captura de un beacon
+ */
 package com.example.ssirsem_upv.appjavasprint0;
 
 import java.util.Arrays;

@@ -1,3 +1,12 @@
+/*
+ *
+ *MedicionPOJO.java
+ *Fecha: 2021/09
+ *Autor: Sergi Sirvent Sempere
+ *
+ *Clase POJO de la medicion. Son las mediciones que obtendremos del sensor (major y minor), junto con un
+ * valro orientativo para procesar las mediciones
+ */
 package com.example.ssirsem_upv.appjavasprint0;
 
 import java.io.Serializable;
@@ -16,14 +25,30 @@ public class MedicionPOJO implements Serializable {
     private int minor;
 
 
-    //constructor de la clase
 
+
+    /**
+     * Constructor de la clase sin major ni minor
+     *
+     * @param medicion
+     * @param latitud
+     * @param longitud
+     */
     public MedicionPOJO(int medicion, double latitud, double longitud) {
         this.medicion = medicion;
         this.latitud = latitud;
         this.longitud = longitud;
     }
 
+    /**
+     * Constructor de la clase con major y minor
+     *
+     * @param medicion
+     * @param latitud
+     * @param longitud
+     * @param major
+     * @param minor
+     */
     public MedicionPOJO(int medicion, double latitud, double longitud, int major, int minor) {
         this.medicion = medicion;
         this.latitud = latitud;

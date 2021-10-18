@@ -7,11 +7,24 @@ import android.util.Log;
 
 import static android.app.Service.START_STICKY;
 
+/**
+ *ServicioEscucharBeacons.java
+ *Fecha: 2021/10
+ *Autor: Sergi Sirvent Sempere
+ *
+ *Clase encargada de definir el servicio de la escucha de los beacons
+ */
+
+
+
+
+
 // -------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------
 public class ServicioEscuharBeacons  extends IntentService {
 
     // ---------------------------------------------------------------------------------------------
+    //Atributos privados de la clase beacons
     // ---------------------------------------------------------------------------------------------
     private static final String ETIQUETA_LOG = ">>>>";
 
@@ -20,6 +33,7 @@ public class ServicioEscuharBeacons  extends IntentService {
     private boolean seguir = true;
 
     // ---------------------------------------------------------------------------------------------
+    //Constructor de la clase
     // ---------------------------------------------------------------------------------------------
     public ServicioEscuharBeacons(  ) {
         super("HelloIntentService");
@@ -29,23 +43,16 @@ public class ServicioEscuharBeacons  extends IntentService {
 
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
-    /*
-    @Override
-    public int onStartCommand( Intent elIntent, int losFlags, int startId) {
 
-        // creo que este método no es necesario usarlo. Lo ejecuta el thread principal !!!
-        super.onStartCommand( elIntent, losFlags, startId );
-
-        this.tiempoDeEspera = elIntent.getLongExtra("tiempoDeEspera", 50000);
-
-        Log.d(ETIQUETA_LOG, " ServicioEscucharBeacons.onStartCommand : empieza: thread=" + Thread.currentThread().getId() );
-
-        return Service.START_CONTINUATION_MASK | Service.START_STICKY;
-    } // ()
-
-     */
 
     // ---------------------------------------------------------------------------------------------
+
+    /**
+     * Metodo de la clase que se encarga de poner en falso el booleano de
+     * seguir, por lo tanto detiene la busqueda
+     *
+     * No recibe ni devuelve nada
+     */
     // ---------------------------------------------------------------------------------------------
     public void parar () {
 
@@ -64,6 +71,12 @@ public class ServicioEscuharBeacons  extends IntentService {
     }
 
     // ---------------------------------------------------------------------------------------------
+
+    /**
+     * Metodo de la clase que se encarga de destruir el objeto de servicio
+     *
+     * No recibe ni devuelve nada
+     */
     // ---------------------------------------------------------------------------------------------
     public void onDestroy() {
 
@@ -76,9 +89,7 @@ public class ServicioEscuharBeacons  extends IntentService {
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
     /**
-     * The IntentService calls this method from the default worker thread with
-     * the intent that started the service. When this method returns, IntentService
-     * stops the service, as appropriate.
+     * Metodo de la clase que se encarga de manejar el intent del servicio de la clase
      */
     @Override
     protected void onHandleIntent(Intent intent) {

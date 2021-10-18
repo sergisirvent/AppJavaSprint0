@@ -1,3 +1,11 @@
+/*
+ *
+ *Utilidades.java
+ *Fecha: 2021/09
+ *Autor: Sergi Sirvent Sempere
+ *
+ *Clase encargada de contener metodos utiles para todas las clases del proyecto
+ */
 package com.example.ssirsem_upv.appjavasprint0.Utilidades;
 
 
@@ -5,9 +13,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-// -----------------------------------------------------------------------------------
-// @author: Jordi Bataller i Mascarell
-// -----------------------------------------------------------------------------------
+
 public class Utilidades {
 
     // -------------------------------------------------------------------------------

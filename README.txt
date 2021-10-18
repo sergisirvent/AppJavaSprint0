@@ -1,0 +1,1 @@
+Directorio referente al repositorio git de la aplicacion java del sprint 0

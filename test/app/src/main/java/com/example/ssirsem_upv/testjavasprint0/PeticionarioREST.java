@@ -1,12 +1,10 @@
-/*
- *
- *PeticionarioREST.java
- *Fecha: 2021/10
- *Autor: Sergi Sirvent Sempere
- *
- *Clase encargada de manejar las peticionesREST a los metodos de la logica verdadera
- */
-package com.example.ssirsem_upv.appjavasprint0;
+
+package com.example.ssirsem_upv.testjavasprint0;
+
+import android.os.AsyncTask;
+import android.util.Log;
+
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -15,12 +13,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-
-import android.os.AsyncTask;
-import android.util.Log;
-
-import org.json.JSONException;
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------

@@ -1,22 +1,25 @@
-package com.example.ssirsem_upv.appjavasprint0.Test;
+/*
+ *
+ *LogicaFakeTest.java
+ *Fecha: 2021/10
+ *Autor: Sergi Sirvent Sempere
+ *
+ *Clase encargada manejar los tests de java
+ */
+package com.example.ssirsem_upv.testjavasprint0.Test;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.ssirsem_upv.appjavasprint0.MainActivity;
-import com.example.ssirsem_upv.appjavasprint0.MedicionPOJO;
-import com.example.ssirsem_upv.appjavasprint0.MostrarMedicionesActivity;
-import com.example.ssirsem_upv.appjavasprint0.PeticionarioREST;
+
+import com.example.ssirsem_upv.testjavasprint0.MedicionPOJO;
+import com.example.ssirsem_upv.testjavasprint0.PeticionarioREST;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +51,7 @@ public  class LogicaFakeTest extends AppCompatActivity {
         //definimos el cuerpo de nuestra peticion
         String textoJSON = "{\"Medicion\":\""+medicion.getMedicion()+"\", \"Longitud\":\""+medicion.getLongitud() +"\", \"Latitud\": \""+medicion.getLatitud()+"\"}";
         //montamos la peticion y la enviamos
-        elPeticionario.hacerPeticionREST("POST", "http://192.168.1.34/back_endSprint0/test/guardarMedicionTest.php", textoJSON,
+        elPeticionario.hacerPeticionREST("POST", "http://172.20.10.9/back_endSprint0/test/guardarMedicionTest.php", textoJSON,
                 new PeticionarioREST.RespuestaREST() {
                     @Override
                     public void callback(int codigo, String cuerpo) {
@@ -82,7 +85,7 @@ public  class LogicaFakeTest extends AppCompatActivity {
         //definimos el cuerpo de nuestra peticion
         String textoJSON = "{'Cuantas': '" + cuantas + "' }";
         //montamos la peticion y la enviamos
-        elPeticionario.hacerPeticionREST("GET", "http://192.168.1.34/back_endSprint0/test/obtenerUltimasMedicionesTest.php?Cuantas="+cuantas+"", null, new PeticionarioREST.RespuestaREST() {
+        elPeticionario.hacerPeticionREST("GET", "http://172.20.10.9/back_endSprint0/test/obtenerUltimasMedicionesTest.php?Cuantas="+cuantas+"", null, new PeticionarioREST.RespuestaREST() {
             @Override
             public void callback(int codigo, String cuerpo) throws JSONException {
                 try {
@@ -121,7 +124,7 @@ public  class LogicaFakeTest extends AppCompatActivity {
         //Log.d("orden","1");
 
         //hacemos la peticion REST
-        elPeticionario.hacerPeticionREST("GET", "http://192.168.1.34/back_endSprint0/test/obtenerTodasLasMedicionesTest.php", null, new PeticionarioREST.RespuestaREST() {
+        elPeticionario.hacerPeticionREST("GET", "http://172.20.10.9/back_endSprint0/test/obtenerTodasLasMedicionesTest.php", null, new PeticionarioREST.RespuestaREST() {
 
             @Override
             public void callback(int codigo, String cuerpo) throws JSONException {

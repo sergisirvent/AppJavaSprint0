@@ -1,3 +1,11 @@
+/*
+ *
+ *MostrarMedicionesActivity.java
+ *Fecha: 2021/10
+ *Autor: Sergi Sirvent Sempere
+ *
+ *Clase encargada de manejar la actividad donde se muestran las mediciones
+ */
 package com.example.ssirsem_upv.appjavasprint0;
 
 import android.content.Intent;
@@ -19,6 +27,7 @@ public class MostrarMedicionesActivity extends AppCompatActivity {
      *
      * @param savedInstanceState
      */
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
