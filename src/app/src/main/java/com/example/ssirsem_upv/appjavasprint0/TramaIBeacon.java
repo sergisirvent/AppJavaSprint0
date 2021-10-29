@@ -11,7 +11,7 @@ package com.example.ssirsem_upv.appjavasprint0;
 import java.util.Arrays;
 
 // -----------------------------------------------------------------------------------
-// @author: Jordi Bataller i Mascarell
+// 
 // -----------------------------------------------------------------------------------
 public class TramaIBeacon {
 

@@ -180,13 +180,13 @@ public class MainActivity extends AppCompatActivity {
         int rssi = resultado.getRssi();
         String nombre = bluetoothDevice.getName() + "";
         if(nombre.equals("sergi")) {
+            TramaIBeacon tib = new TramaIBeacon(bytes);
 
-
-            Log.d(ETIQUETA_LOG, " ******************");
-            Log.d(ETIQUETA_LOG, " ** DISPOSITIVO DETECTADO BTLE ****** ");
-            Log.d(ETIQUETA_LOG, " ******************");
-            Log.d(ETIQUETA_LOG, " nombre = " + bluetoothDevice.getName());
-            Log.d(ETIQUETA_LOG, " toString = " + bluetoothDevice.toString());
+                Log.d(ETIQUETA_LOG, " ******************");
+                Log.d(ETIQUETA_LOG, " ** DISPOSITIVO DETECTADO BTLE ****** ");
+                Log.d(ETIQUETA_LOG, " ******************");
+                Log.d(ETIQUETA_LOG, " nombre = " + bluetoothDevice.getName());
+                Log.d(ETIQUETA_LOG, " toString = " + bluetoothDevice.toString());
 
         /*
         ParcelUuid[] puuids = bluetoothDevice.getUuids();
@@ -195,32 +195,38 @@ public class MainActivity extends AppCompatActivity {
            // Log.d(ETIQUETA_LOG, " uuid = " + puuids[0].toString());
         }*/
 
-            Log.d(ETIQUETA_LOG, " dirección = " + bluetoothDevice.getAddress());
-            Log.d(ETIQUETA_LOG, " rssi = " + rssi);
+                Log.d(ETIQUETA_LOG, " dirección = " + bluetoothDevice.getAddress());
+                Log.d(ETIQUETA_LOG, " rssi = " + rssi);
 
-            Log.d(ETIQUETA_LOG, " bytes = " + new String(bytes));
-            Log.d(ETIQUETA_LOG, " bytes (" + bytes.length + ") = " + Utilidades.bytesToHexString(bytes));
+                Log.d(ETIQUETA_LOG, " bytes = " + new String(bytes));
+                Log.d(ETIQUETA_LOG, " bytes (" + bytes.length + ") = " + Utilidades.bytesToHexString(bytes));
 
-            TramaIBeacon tib = new TramaIBeacon(bytes);
 
-            Log.d(ETIQUETA_LOG, " ----------------------------------------------------");
-            Log.d(ETIQUETA_LOG, " prefijo  = " + Utilidades.bytesToHexString(tib.getPrefijo()));
-            Log.d(ETIQUETA_LOG, "          advFlags = " + Utilidades.bytesToHexString(tib.getAdvFlags()));
-            Log.d(ETIQUETA_LOG, "          advHeader = " + Utilidades.bytesToHexString(tib.getAdvHeader()));
-            Log.d(ETIQUETA_LOG, "          companyID = " + Utilidades.bytesToHexString(tib.getCompanyID()));
-            Log.d(ETIQUETA_LOG, "          iBeacon type = " + Integer.toHexString(tib.getiBeaconType()));
-            Log.d(ETIQUETA_LOG, "          iBeacon length 0x = " + Integer.toHexString(tib.getiBeaconLength()) + " ( "
-                    + tib.getiBeaconLength() + " ) ");
-            Log.d(ETIQUETA_LOG, " uuid  = " + Utilidades.bytesToHexString(tib.getUUID()));
-            Log.d(ETIQUETA_LOG, " uuid  = " + Utilidades.bytesToString(tib.getUUID()));
-            Log.d(ETIQUETA_LOG, " major  = " + Utilidades.bytesToHexString(tib.getMajor()) + "( "
-                    + Utilidades.bytesToInt(tib.getMajor()) + " ) ");
-            Log.d(ETIQUETA_LOG, " minor  = " + Utilidades.bytesToHexString(tib.getMinor()) + "( "
-                    + Utilidades.bytesToInt(tib.getMinor()) + " ) ");
-            Log.d(ETIQUETA_LOG, " txPower  = " + Integer.toHexString(tib.getTxPower()) + " ( " + tib.getTxPower() + " )");
-            Log.d(ETIQUETA_LOG, " ******************");
-            minorMedicion=Utilidades.bytesToInt(tib.getMinor());
-            majorMedicion=Utilidades.bytesToInt(tib.getMajor());
+
+                Log.d(ETIQUETA_LOG, " ----------------------------------------------------");
+                Log.d(ETIQUETA_LOG, " prefijo  = " + Utilidades.bytesToHexString(tib.getPrefijo()));
+                Log.d(ETIQUETA_LOG, "          advFlags = " + Utilidades.bytesToHexString(tib.getAdvFlags()));
+                Log.d(ETIQUETA_LOG, "          advHeader = " + Utilidades.bytesToHexString(tib.getAdvHeader()));
+                Log.d(ETIQUETA_LOG, "          companyID = " + Utilidades.bytesToHexString(tib.getCompanyID()));
+                Log.d(ETIQUETA_LOG, "          iBeacon type = " + Integer.toHexString(tib.getiBeaconType()));
+                Log.d(ETIQUETA_LOG, "          iBeacon length 0x = " + Integer.toHexString(tib.getiBeaconLength()) + " ( "
+                        + tib.getiBeaconLength() + " ) ");
+                Log.d(ETIQUETA_LOG, " uuid  = " + Utilidades.bytesToHexString(tib.getUUID()));
+                Log.d(ETIQUETA_LOG, " uuid  = " + Utilidades.bytesToString(tib.getUUID()));
+                Log.d(ETIQUETA_LOG, " major  = " + Utilidades.bytesToHexString(tib.getMajor()) + "( "
+                        + Utilidades.bytesToInt(tib.getMajor()) + " ) ");
+                Log.d(ETIQUETA_LOG, " minor  = " + Utilidades.bytesToHexString(tib.getMinor()) + "( "
+                        + Utilidades.bytesToInt(tib.getMinor()) + " ) ");
+                Log.d(ETIQUETA_LOG, " txPower  = " + Integer.toHexString(tib.getTxPower()) + " ( " + tib.getTxPower() + " )");
+                Log.d(ETIQUETA_LOG, " ******************");
+
+                minorMedicion=Utilidades.bytesToInt(tib.getMinor());
+                majorMedicion=Utilidades.bytesToInt(tib.getMajor());
+                Log.d("Minor","Dato--------------------------->" +Utilidades.bytesToInt(tib.getMinor()) );
+                Log.d("Major","DatoMajor--------------------------->" +Utilidades.bytesToInt(tib.getMajor()));
+
+
+
         }
 
     } // ()

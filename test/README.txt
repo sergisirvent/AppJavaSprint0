@@ -1,0 +1,1 @@
+Directorio aisaldo para probar los metodos de la logica verdadera en una base de datos aparte
