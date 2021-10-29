@@ -43,7 +43,7 @@ public  class LogicaFake extends AppCompatActivity {
 
 
         //definimos el cuerpo de nuestra peticion
-        String textoJSON = "{\"Medicion\":\""+medicion.getMedicion()+"\", \"Longitud\":\""+medicion.getLongitud() +"\", \"Latitud\": \""+medicion.getLatitud()+"\" , \"Major\": \""+medicion.getMajor()+"\" , \"Minor\": \""+medicion.getMinor()+"\"}";
+        String textoJSON = "{\"Medicion\":\""+medicion.getMedicion()+"\", \"Longitud\":\""+medicion.getLongitud() +"\", \"Latitud\": \""+medicion.getLatitud()+"\" , \"Minor\": \""+medicion.getMinor()+"\"}";
         //montamos la peticion y la enviamos
         elPeticionario.hacerPeticionREST("POST", "http://172.20.10.9/back_endSprint0/src/LogicaNegocio/guardarMedicion.php", textoJSON,
                 new PeticionarioREST.RespuestaREST() {

@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): empezamos a escanear ");
 
+        //esto hay que temporizar
         this.elEscanner.startScan(this.callbackDelEscaneo);
 
     } // ()
@@ -172,9 +173,11 @@ public class MainActivity extends AppCompatActivity {
      * @param {ScanResult} resultado - Resultado del escaner previo.
      */
     // --------------------------------------------------------------
+    int medicionActual = 0;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void mostrarInformacionDispositivoBTLE(ScanResult resultado) {
 
+        boolean primeraVez = true;
         BluetoothDevice bluetoothDevice = resultado.getDevice();
         byte[] bytes = resultado.getScanRecord().getBytes();
         int rssi = resultado.getRssi();
@@ -220,8 +223,30 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(ETIQUETA_LOG, " txPower  = " + Integer.toHexString(tib.getTxPower()) + " ( " + tib.getTxPower() + " )");
                 Log.d(ETIQUETA_LOG, " ******************");
 
+                //atribuimos los valores del sensor a nuestra medición
+
                 minorMedicion=Utilidades.bytesToInt(tib.getMinor());
                 majorMedicion=Utilidades.bytesToInt(tib.getMajor());
+
+
+
+                if (primeraVez){
+                    medicionActual = minorMedicion;
+                    MedicionPOJO medicion = new MedicionPOJO(1234,latitud,longitud,medicionActual);
+                    logicaFake.guardarMedicion(medicion);
+
+                    primeraVez = false;
+
+                }else {
+
+                    if(medicionActual != minorMedicion){
+                        MedicionPOJO medicion = new MedicionPOJO(1234,latitud,longitud,medicionActual);
+                        logicaFake.guardarMedicion(medicion);
+
+                    }
+                }
+
+
                 Log.d("Minor","Dato--------------------------->" +Utilidades.bytesToInt(tib.getMinor()) );
                 Log.d("Major","DatoMajor--------------------------->" +Utilidades.bytesToInt(tib.getMajor()));
 
@@ -282,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): empezamos a escanear buscando: " + dispositivoBuscado);
         //Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): empezamos a escanear buscando: " + dispositivoBuscado
         //      + " -> " + Utilidades.stringToUUID( dispositivoBuscado ) );
+
 
         this.elEscanner.startScan(this.callbackDelEscaneo);
     } // ()
@@ -531,7 +557,7 @@ public class MainActivity extends AppCompatActivity {
         if(txtMediciones.getText().toString().equals("")){
             Toast.makeText(this,"Introduce un valor de medicion", Toast.LENGTH_SHORT).show();
         }else {
-            MedicionPOJO medicion = new MedicionPOJO(Integer.parseInt(txtMediciones.getText().toString()),latitud,longitud,majorMedicion,minorMedicion);
+            MedicionPOJO medicion = new MedicionPOJO(Integer.parseInt(txtMediciones.getText().toString()),latitud,longitud,minorMedicion);
             logicaFake.guardarMedicion(medicion);
             Toast.makeText(this, "Se ha añadido la medicion con valor: "+ txtMediciones.getText().toString(), Toast.LENGTH_SHORT).show();
         }
