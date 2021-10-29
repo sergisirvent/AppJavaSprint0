@@ -21,7 +21,6 @@ public class MedicionPOJO implements Serializable {
     //valores de las coordenadas para saber desde donde se tomó la medición
     private double latitud;
     private double longitud;
-    private int major;
     private int minor;
 
 
@@ -46,14 +45,12 @@ public class MedicionPOJO implements Serializable {
      * @param medicion
      * @param latitud
      * @param longitud
-     * @param major
      * @param minor
      */
-    public MedicionPOJO(int medicion, double latitud, double longitud, int major, int minor) {
+    public MedicionPOJO(int medicion, double latitud, double longitud, int minor) {
         this.medicion = medicion;
         this.latitud = latitud;
         this.longitud = longitud;
-        this.major = major;
         this.minor = minor;
     }
 
@@ -88,15 +85,7 @@ public class MedicionPOJO implements Serializable {
         return longitud;
     }
 
-    /**
-     * getter del atributo major
-     *
-     * @return major {Z}
-     */
 
-    public int getMajor() {
-        return major;
-    }
 
     /**
      * getter del atributo minor
