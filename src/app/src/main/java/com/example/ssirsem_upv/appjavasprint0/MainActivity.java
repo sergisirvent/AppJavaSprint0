@@ -25,6 +25,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
      * muestra su informacion y en caso de no haberlos indica que no hay.No recibe ni devuelve nada.
      */
     // --------------------------------------------------------------
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void buscarTodosLosDispositivosBTLE() {
         Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): empieza ");
@@ -136,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
                 //mostramos la info
                 mostrarInformacionDispositivoBTLE(resultado);
+
+
             }
 
             @Override
@@ -159,8 +163,12 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): empezamos a escanear ");
 
+        delay = false;
+
         //esto hay que temporizar
-        this.elEscanner.startScan(this.callbackDelEscaneo);
+            this.elEscanner.startScan(this.callbackDelEscaneo);
+
+
 
     } // ()
 
@@ -173,17 +181,21 @@ public class MainActivity extends AppCompatActivity {
      * @param {ScanResult} resultado - Resultado del escaner previo.
      */
     // --------------------------------------------------------------
-    int medicionActual = 0;
+    int majorActual = 0;
+    boolean primeraVez = true;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void mostrarInformacionDispositivoBTLE(ScanResult resultado) {
 
-        boolean primeraVez = true;
+
         BluetoothDevice bluetoothDevice = resultado.getDevice();
         byte[] bytes = resultado.getScanRecord().getBytes();
         int rssi = resultado.getRssi();
         String nombre = bluetoothDevice.getName() + "";
         if(nombre.equals("sergi")) {
-            TramaIBeacon tib = new TramaIBeacon(bytes);
+
+
+                primeraVez = false;
+                TramaIBeacon tib = new TramaIBeacon(bytes);
 
                 Log.d(ETIQUETA_LOG, " ******************");
                 Log.d(ETIQUETA_LOG, " ** DISPOSITIVO DETECTADO BTLE ****** ");
@@ -228,27 +240,23 @@ public class MainActivity extends AppCompatActivity {
                 minorMedicion=Utilidades.bytesToInt(tib.getMinor());
                 majorMedicion=Utilidades.bytesToInt(tib.getMajor());
 
-
-
-                if (primeraVez){
-                    medicionActual = minorMedicion;
-                    MedicionPOJO medicion = new MedicionPOJO(1234,latitud,longitud,medicionActual);
-                    logicaFake.guardarMedicion(medicion);
-
+                if (primeraVez || majorActual != majorMedicion){
+                    majorActual = majorMedicion;
                     primeraVez = false;
+                    Log.d("Major","MajorActual--------------------------->" +Utilidades.bytesToInt(tib.getMajor()));
 
-                }else {
-
-                    if(medicionActual != minorMedicion){
-                        MedicionPOJO medicion = new MedicionPOJO(1234,latitud,longitud,medicionActual);
-                        logicaFake.guardarMedicion(medicion);
-
-                    }
+                    // construimos la medicion a guardar
+                    MedicionPOJO medicion = new MedicionPOJO(1234,latitud,longitud,minorMedicion);
+                    //la guardamos con el metodo de la logica fake
+                    logicaFake.guardarMedicion(medicion);
+                    Log.d("Major","Medicion Introducida con valor--------------------------->" +Utilidades.bytesToInt(tib.getMinor()));
                 }
 
-
+                /*
                 Log.d("Minor","Dato--------------------------->" +Utilidades.bytesToInt(tib.getMinor()) );
                 Log.d("Major","DatoMajor--------------------------->" +Utilidades.bytesToInt(tib.getMajor()));
+                */
+
 
 
 
@@ -256,7 +264,6 @@ public class MainActivity extends AppCompatActivity {
 
     } // ()
 
-    // --------------------------------------------------------------
 
     /**
      * Este método privado se encarga de buscar un dispositivo a partir de su nombre.
@@ -265,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
      * @param {String} dispositivoBuscado - Nombre del dispositivo buscado.
      */
     // --------------------------------------------------------------
+    boolean delay = true;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void buscarEsteDispositivoBTLE(final String dispositivoBuscado) {
         Log.d(ETIQUETA_LOG, " buscarEsteDispositivoBTLE(): empieza ");
@@ -310,6 +318,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         this.elEscanner.startScan(this.callbackDelEscaneo);
+
+
     } // ()
 
     // --------------------------------------------------------------
@@ -369,6 +379,7 @@ public class MainActivity extends AppCompatActivity {
 
         //this.buscarEsteDispositivoBTLE( "EPSG-GTI-PROY-3A" );
         //llamamos metodo de la logica al pulsar el boton
+        Log.d("Control","Etiqueta de control");
         this.buscarEsteDispositivoBTLE("sergi");
 
     } // ()
